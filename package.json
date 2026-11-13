@@ -1,0 +1,71 @@
+{
+  "name": "multi-screens",
+  "version": "1.6.1",
+  "description": "Preview one web app side by side on several device screens",
+  "author": "SCAFFApps",
+  "license": "SEE LICENSE IN LICENSE",
+  "homepage": "https://github.com/Rady193/multi-screens",
+  "repository": "github:Rady193/multi-screens",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8",
+    "rcedit": "^4.0.1"
+  },
+  "build": {
+    "appId": "com.scaffapps.multiscreens",
+    "productName": "Multi Screens",
+    "copyright": "Copyright © 2026 SCAFFApps",
+    "files": [
+      "main.js",
+      "host-preload.js",
+      "guest-preload.js",
+      "app/**",
+      "monitors.ps1"
+    ],
+    "publish": null,
+    "directories": {
+      "output": "release"
+    },
+    "electronDist": "node_modules/electron/dist",
+    "afterPack": "build/after-pack.js",
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Multi Screens",
+      "artifactName": "Multi-Screens-Setup-${version}.${ext}",
+      "include": "build/installer.nsh"
+    },
+    "portable": {
+      "artifactName": "Multi-Screens-${version}-portable.${ext}"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.png",
+      "category": "public.app-category.developer-tools"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "build/icon.png",
+      "category": "Development"
+    }
+  }
+}

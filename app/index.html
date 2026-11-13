@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self'; object-src 'none'">
+  <title>Multi Screens</title>
+  <script src="theme-early.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="chrome">
+    <div class="titlebar">
+      <img src="icon.png" alt="">
+      <span>Multi Screens</span>
+    </div>
+    <div class="toolbar">
+      <div class="group nav">
+        <button class="icon-btn" id="back" data-icon="back" title="Back (all screens)"></button>
+        <button class="icon-btn" id="forward" data-icon="forward" title="Forward (all screens)"></button>
+        <button class="icon-btn" id="reload" data-icon="reload" title="Reload all screens (F5)"></button>
+      </div>
+      <form id="url-form">
+        <span class="url-icon" data-icon="globe"></span>
+        <input id="url" type="text" spellcheck="false" autocomplete="off" list="url-history"
+               placeholder="Enter your app's address, e.g. https://myapp.example.com or localhost:3000">
+        <datalist id="url-history"></datalist>
+        <button type="submit" class="primary">Go</button>
+      </form>
+      <div class="group nav">
+        <button class="icon-btn" id="folder-btn" data-icon="folder" title="Open the output folder (screenshots, videos and reports)"></button>
+        <button class="icon-btn pop-btn" id="history-btn" data-icon="clock" title="History of visited pages"></button>
+        <button class="icon-btn pop-btn" id="logins-btn" data-icon="key" title="Saved logins"></button>
+        <button class="icon-btn" id="record-btn" title="Record a video of the app window"></button>
+        <span id="record-time" class="dim" hidden></span>
+        <button class="icon-btn pop-btn" id="settings-btn" data-icon="sliders" title="Settings"></button>
+        <button class="icon-btn" id="theme-toggle" title="Switch appearance"></button>
+      </div>
+      <div class="group segmented" title="How the screens are sized">
+        <button id="fit" title="Shrink all screens so they are visible at once">Fit all</button>
+        <button id="fit-each" title="Make every screen as large as the window allows; scroll sideways to move between screens">Large</button>
+        <button id="actual" title="Draw every screen life-size: the same size as the real device (100%)">Actual size</button>
+      </div>
+      <div class="group">
+        <input id="zoom" type="range" min="15" max="150" step="1" title="Size compared with the real devices. 100% draws every screen life-size on this display.">
+        <span id="zoom-label" class="dim"></span>
+      </div>
+      <span class="row-break"></span>
+      <div class="group chips" id="device-toggles"></div>
+    </div>
+    <div class="toolbar tools">
+      <div class="group">
+        <span class="dim">Sync</span>
+        <label class="toggle" title="Scrolling one screen scrolls the others"><input type="checkbox" id="sync-scroll" checked> Scroll</label>
+        <label class="toggle" title="Navigating in one screen navigates the others"><input type="checkbox" id="sync-nav" checked> Navigation</label>
+        <label class="toggle" title="Clicking, typing or hovering in one screen is repeated in the others"><input type="checkbox" id="sync-input" checked> Clicks, typing &amp; hover</label>
+      </div>
+      <span class="divider"></span>
+      <div class="group">
+        <label class="dim" for="scheme">Page theme</label>
+        <select id="scheme" title="What the page sees for prefers-color-scheme">
+          <option value="">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+        <label class="dim" for="network">Network</label>
+        <select id="network" title="Simulate a slower connection on every screen">
+          <option value="none">Full speed</option>
+          <option value="fast4g">Fast 4G</option>
+          <option value="slow4g">Slow 4G</option>
+          <option value="slow3g">Slow 3G</option>
+          <option value="offline">Offline</option>
+        </select>
+        <label class="toggle" title="Tell the page the user prefers reduced motion"><input type="checkbox" id="reduced-motion"> Reduced motion</label>
+        <label class="toggle" title="Use the mouse as a finger on phone and tablet screens: drag to scroll, taps send touch events. Shows a round touch cursor."><input type="checkbox" id="touch-input"> Touch input</label>
+      </div>
+      <span class="divider"></span>
+      <div class="group">
+        <label class="toggle" title="Draw an outline around every element to reveal the layout"><input type="checkbox" id="outline"> Outlines</label>
+        <label class="toggle" title="Wrap screens onto several rows instead of one scrolling row"><input type="checkbox" id="wrap"> Wrap</label>
+      </div>
+      <span class="spacer"></span>
+      <div class="group">
+        <button class="ghost" id="window-note-btn" title="Add a note anywhere in the app window: across several screens, or on the toolbars"><span data-icon="note"></span><span class="label">Note anywhere</span></button>
+        <button class="ghost" id="notes-btn" title="Review notes: check, reword or discard your notes, then create the report"><span data-icon="report"></span><span class="label">Review notes</span><span id="notes-count" class="count" hidden></span></button>
+        <button class="ghost" id="overflow" title="Highlight elements that make the page scroll sideways"><span data-icon="overflow"></span><span class="label">Find overflow</span></button>
+        <button class="ghost" id="shot-all" title="Save a screenshot of every visible screen"><span data-icon="camera"></span><span class="label">Screenshot all</span></button>
+        <button class="ghost" id="clear-data" title="Sign out everywhere: delete cookies, storage and cache for the previewed pages"><span data-icon="trash"></span><span class="label">Clear site data</span></button>
+      </div>
+    </div>
+  </header>
+  <main id="stage"></main>
+  <div id="window-note-layer" class="note-layer window" hidden></div>
+  <div id="note-editor" class="note-editor" hidden></div>
+  <div id="review-modal" class="review-modal" hidden></div>
+  <div id="zoom-view" class="zoom-view" hidden></div>
+  <div id="popover" class="popover" hidden></div>
+  <div id="toast" hidden></div>
+  <script src="renderer.js"></script>
+</body>
+</html>

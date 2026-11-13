@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multi Screens</title>
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f4f6fa; color: #1c2230; font: 16px/1.5 system-ui, sans-serif; }
+    main { padding: 24px; text-align: center; max-width: 30em; }
+    h1 { margin: 0 0 4px; font-size: 1.4em; }
+    p { margin: 0 0 18px; color: #5b6477; }
+    dl { display: grid; grid-template-columns: auto auto; gap: 6px 14px; margin: 0; text-align: left; justify-content: center; }
+    dt { color: #5b6477; }
+    dd { margin: 0; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Ready</h1>
+    <p>Type your app's address in the bar above and press Go.</p>
+    <dl>
+      <dt>Viewport</dt><dd id="vp"></dd>
+      <dt>Pixel ratio</dt><dd id="dpr"></dd>
+      <dt>Touch</dt><dd id="touch"></dd>
+      <dt>Reports as</dt><dd id="kind"></dd>
+    </dl>
+  </main>
+  <script>
+    function show() {
+      var ua = navigator.userAgent;
+      document.getElementById('vp').textContent = innerWidth + ' × ' + innerHeight;
+      document.getElementById('dpr').textContent = devicePixelRatio;
+      document.getElementById('touch').textContent = navigator.maxTouchPoints > 0 ? 'yes' : 'no';
+      document.getElementById('kind').textContent =
+        /iPhone/.test(ua) ? 'iPhone Safari' : /Android/.test(ua) ? 'Android Chrome' :
+        /Macintosh/.test(ua) ? 'iPad Safari' : 'Windows Chrome';
+    }
+    show();
+    addEventListener('resize', show);
+  </script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Multi Screens Handbook</title>
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; color: #1b1f27; font: 10.5pt/1.5 "Segoe UI", system-ui, sans-serif; }
+  h1, h2, h3 { line-height: 1.2; }
+  h2 { margin: 0 0 4mm; padding-bottom: 2.5mm; font-size: 19pt; letter-spacing: -.2pt; border-bottom: .6mm solid #4a6cf5; break-after: avoid; }
+  h3 { margin: 7mm 0 2mm; font-size: 12.5pt; break-after: avoid; }
+  p { margin: 0 0 3mm; }
+  ul, ol { margin: 0 0 3mm; padding-left: 5.5mm; }
+  li { margin-bottom: 1.2mm; }
+  section { break-before: page; }
+  strong { font-weight: 650; }
+  .lead { font-size: 11.5pt; color: #3a4252; }
+  .muted { color: #667085; }
+
+  .cover { height: 247mm; display: flex; flex-direction: column; justify-content: center; }
+  .cover img { width: 30mm; height: 30mm; margin-bottom: 9mm; }
+  .cover h1 { margin: 0; font-size: 40pt; letter-spacing: -.8pt; }
+  .cover .sub { margin-top: 3mm; font-size: 17pt; color: #4a6cf5; font-weight: 600; }
+  .cover .line { width: 26mm; height: 1.2mm; margin: 10mm 0; background: #4a6cf5; border-radius: 1mm; }
+  .cover p { max-width: 125mm; font-size: 12pt; color: #3a4252; }
+  .cover .meta { margin-top: auto; color: #667085; font-size: 10pt; }
+
+  .toc { list-style: none; padding: 0; margin: 0; columns: 2; column-gap: 12mm; }
+  .toc li { display: flex; gap: 3mm; padding: 1.7mm 0; border-bottom: .2mm solid #e3e7f0; break-inside: avoid; margin: 0; }
+  .toc b { width: 7mm; color: #4a6cf5; }
+
+  table { width: 100%; margin: 2mm 0 4mm; border-collapse: collapse; font-size: 9.6pt; break-inside: avoid; }
+  th, td { padding: 1.8mm 2.4mm; text-align: left; vertical-align: top; border-bottom: .2mm solid #e3e7f0; }
+  th { color: #667085; font-size: 8.6pt; font-weight: 650; letter-spacing: .3pt; text-transform: uppercase; background: #f6f8fc; }
+  td:first-child { white-space: nowrap; font-weight: 600; }
+  table.wrap td:first-child { white-space: normal; }
+
+  figure { margin: 3mm 0 5mm; break-inside: avoid; }
+  figure img { display: block; width: 100%; border: .3mm solid #d5dae6; border-radius: 2mm; }
+  figure.narrow img { width: 62%; margin: 0 auto; }
+  figcaption { margin-top: 1.6mm; color: #667085; font-size: 8.8pt; text-align: center; }
+
+  .tip, .warn { margin: 3mm 0 4mm; padding: 3mm 4mm; border-radius: 2mm; break-inside: avoid; }
+  .tip { background: #f1f5ff; border-left: 1.1mm solid #4a6cf5; }
+  .warn { background: #fff7ed; border-left: 1.1mm solid #e8833a; }
+  .tip b, .warn b { display: block; margin-bottom: .6mm; }
+
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { position: relative; padding-left: 10mm; margin-bottom: 2.6mm; break-inside: avoid; }
+  .steps li::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: .2mm; width: 6.4mm; height: 6.4mm; display: grid; place-items: center; color: #fff; background: #4a6cf5; border-radius: 50%; font-size: 9pt; font-weight: 700; }
+
+  kbd { padding: .3mm 1.6mm; background: #f1f3f8; border: .25mm solid #cfd5e2; border-bottom-width: .6mm; border-radius: 1.2mm; font: 9pt "Segoe UI", sans-serif; white-space: nowrap; }
+  code { padding: .2mm 1.2mm; background: #f1f3f8; border-radius: 1mm; font: 9.2pt Consolas, monospace; overflow-wrap: anywhere; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <img src="../app/icon.png" alt="">
+  <h1>Multi Screens</h1>
+  <div class="sub">Handbook</div>
+  <div class="line"></div>
+  <p>Review one web app on a phone, a tablet and a laptop at the same time. Scroll, click and type once and every screen follows. Mark what is wrong, and hand over a report.</p>
+  <div class="meta">Version 1.6.1 · Windows 10 and 11 (64-bit)</div>
+</div>
+
+<section>
+  <h2>Contents</h2>
+  <ol class="toc">
+    <li><b>1</b> What Multi Screens is</li>
+    <li><b>2</b> Installing and starting</li>
+    <li><b>3</b> The window at a glance</li>
+    <li><b>4</b> The four screens</li>
+    <li><b>5</b> Size and scale</li>
+    <li><b>6</b> Keeping the screens in step</li>
+    <li><b>7</b> Review notes and the report</li>
+    <li><b>8</b> Screenshots and video</li>
+    <li><b>9</b> Testing conditions and layout checks</li>
+    <li><b>10</b> History, saved logins and settings</li>
+    <li><b>11</b> Shortcuts and where files go</li>
+    <li><b>12</b> Limits and troubleshooting</li>
+  </ol>
+
+  <h3 style="margin-top:12mm">1. What Multi Screens is</h3>
+  <p class="lead">Multi Screens shows a web address on several device screens side by side, each with that device's real screen size, pixel density, touch behaviour and browser identity.</p>
+  <p>It is built for reviewing a web app before it reaches real devices. Instead of opening the same page on four devices and repeating every step four times, you do it once:</p>
+  <ul>
+    <li><strong>Look</strong> at the page on a Samsung S24 Ultra, an iPhone 16 Pro, an iPad and a 15.6-inch laptop together.</li>
+    <li><strong>Interact</strong> on any one screen. Scrolling, navigation, clicks, typing and hover are repeated on the others.</li>
+    <li><strong>Record</strong> what you find: mark a spot or an area, write a comment, and create a PDF report with pictures.</li>
+  </ul>
+  <div class="tip"><b>What it is for, and what it is not</b>Sizes, breakpoints, touch and layout are accurate. All screens use the same browser engine (Chromium), so a fault that only happens in Safari on a real iPhone will not show. Use Multi Screens to find layout and behaviour problems quickly, and keep a final check on a real device.</div>
+</section>
+
+<section>
+  <h2>2. Installing and starting</h2>
+  <p>Two files are provided. Use whichever suits you.</p>
+  <table class="wrap">
+    <tr><th>File</th><th>What it does</th></tr>
+    <tr><td>Multi-Screens-Setup-1.6.1.exe</td><td>Installer. Installs for everyone on the computer, in <code>C:\Program Files\Multi Screens</code> unless you choose another folder, so Windows asks for administrator permission once. It adds Start menu and desktop shortcuts, and can be removed later from Windows Settings.</td></tr>
+    <tr><td>Multi-Screens-1.6.1-portable.exe</td><td>A single file. Nothing is installed and no administrator permission is needed. Copy it anywhere, including a USB stick, and double-click it.</td></tr>
+  </table>
+  <p>No other software is needed.</p>
+
+  <div class="warn"><b>"Windows protected your PC"</b>The app is not code-signed, so Windows may show this message the first time you run either file. Choose <strong>More info</strong>, then <strong>Run anyway</strong>.</div>
+
+  <h3>The output folder</h3>
+  <p>Everything the app saves goes into one folder that you choose:</p>
+  <ul>
+    <li><strong>Installer:</strong> a page titled "Output folder" asks where to save. It suggests <code>Documents\Multi Screens</code>.</li>
+    <li><strong>Portable file:</strong> the app asks once, the first time it starts.</li>
+  </ul>
+  <p>Inside that folder the app keeps three subfolders: <code>Screenshots</code>, <code>Videos</code> and <code>Reports</code>. The folder button in the top bar opens it. You can change it later in Settings.</p>
+
+  <h3>Your first review</h3>
+  <ol class="steps">
+    <li>Open Multi Screens. With more than one monitor connected it opens on the physically largest one.</li>
+    <li>Type your app's address in the bar at the top and press <strong>Go</strong>. An address on your own computer works too, for example <code>localhost:3000</code>.</li>
+    <li>The page loads on all four screens. Scroll or click on any one of them and the others follow.</li>
+    <li>Sign in once. All screens share the same sign-in.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>3. The window at a glance</h2>
+  <figure>
+    <img src="img/main-dark.png" alt="The Multi Screens window">
+    <figcaption>The main window, showing a sample page on all four screens.</figcaption>
+  </figure>
+
+  <h3>Top bar</h3>
+  <table class="wrap">
+    <tr><th>Control</th><th>What it does</th></tr>
+    <tr><td>Back, forward, reload</td><td>Act on all screens at once.</td></tr>
+    <tr><td>Address bar and Go</td><td>Loads an address on every screen. It suggests addresses you have visited.</td></tr>
+    <tr><td>Folder</td><td>Opens the output folder.</td></tr>
+    <tr><td>Clock</td><td>History of visited pages.</td></tr>
+    <tr><td>Key</td><td>Saved logins.</td></tr>
+    <tr><td>Record</td><td>Records a video of the whole app window.</td></tr>
+    <tr><td>Sliders</td><td>Settings: display size and output folder.</td></tr>
+    <tr><td>Sun or moon</td><td>Switches the app between dark and light.</td></tr>
+    <tr><td>Fit all, Large, Actual size</td><td>How the screens are sized. See section 5.</td></tr>
+    <tr><td>Zoom slider</td><td>Sets a size of your own, from 15% to 150% of life size.</td></tr>
+    <tr><td>Device chips</td><td>Show or hide each screen.</td></tr>
+  </table>
+
+  <h3>Second bar</h3>
+  <p>Switches for what is kept in step (Sync), the conditions the page is tested under, layout aids, and on the right the tools: Note anywhere, Review notes, Find overflow, Screenshot all and Clear site data. On narrower windows those tools show as icons only; hover over one to see its name.</p>
+
+  <h3>Each screen</h3>
+  <div class="two">
+    <div>
+      <p><strong>Above the screen:</strong></p>
+      <ul>
+        <li>Its name. Click it to show only that screen; click again to bring the others back.</li>
+        <li>Its size as a percentage of life size. Type a value to size that screen on its own.</li>
+        <li>A red number if the page has logged errors.</li>
+        <li>Its width and height, which you can edit.</li>
+      </ul>
+    </div>
+    <div>
+      <p><strong>Below the screen, left to right:</strong></p>
+      <ul>
+        <li>Rotate</li>
+        <li>Reload this screen</li>
+        <li>Screenshot</li>
+        <li>Record this screen</li>
+        <li>Developer tools</li>
+        <li>Add a note</li>
+        <li>Review notes and create the report</li>
+      </ul>
+    </div>
+  </div>
+  <p class="muted">The screen you last used is the leader. It is outlined and its name is highlighted.</p>
+</section>
+
+<section>
+  <h2>4. The four screens</h2>
+  <table>
+    <tr><th>Screen</th><th>Screen size (CSS px)</th><th>Page area (CSS px)</th><th>Pixel ratio</th><th>Identifies as</th></tr>
+    <tr><td>Samsung S24 Ultra</td><td>384 × 832</td><td>384 × 745</td><td>3.75</td><td>Chrome on Android, touch</td></tr>
+    <tr><td>iPhone 16 Pro</td><td>402 × 874</td><td>402 × 812</td><td>3</td><td>Safari on iPhone, touch</td></tr>
+    <tr><td>iPad</td><td>820 × 1180</td><td>820 × 1156</td><td>2</td><td>Safari on iPad, touch</td></tr>
+    <tr><td>Laptop 15.6"</td><td>1536 × 864</td><td>1536 × 864</td><td>1.25</td><td>Chrome on Windows</td></tr>
+  </table>
+  <p>"CSS px" are the units a web page works in. They are what your page's breakpoints respond to, and are smaller numbers than the device's hardware pixels.</p>
+
+  <h3>System bars</h3>
+  <p>Each device is drawn with the bars a real one has, and the page gets the space between them. The phone measurements were taken from screenshots of a real iPhone 16 Pro and Samsung S24 Ultra.</p>
+  <ul>
+    <li><strong>Samsung:</strong> a dark status bar at the top with the camera punch-hole in its centre, and the dark three-button navigation bar at the bottom.</li>
+    <li><strong>iPhone:</strong> a status bar that takes the page's colour, with the camera pill inside it. The page starts below it and runs to the bottom of the screen, where the browser's floating address bar sits over it. Content under that bar is covered on the real phone too.</li>
+    <li><strong>iPad:</strong> a thin status bar at the top and the home line over the bottom of the page. These heights are estimates.</li>
+  </ul>
+
+  <h3>Changing a screen</h3>
+  <ul>
+    <li><strong>Rotate</strong> turns a screen between portrait and landscape.</li>
+    <li><strong>Width and height</strong> can be typed above any screen, for example to try a different laptop size.</li>
+    <li><strong>Laptop</strong> assumes a 1920 × 1080 display at Windows' usual 125% scaling. If yours differs, change the numbers.</li>
+  </ul>
+
+  <figure>
+    <img src="img/main-light.png" alt="The window in the light appearance">
+    <figcaption>The same window in the light appearance.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>5. Size and scale</h2>
+  <p class="lead">Every percentage in the app means the same thing: size compared with the real device. At 100% a screen is drawn life-size on your display.</p>
+  <p>The number is the same for every screen, and a screen keeps its size whether it is shown alone or beside others. A 6.8-inch phone is always drawn larger than a 6.3-inch one, as in real life.</p>
+
+  <table class="wrap">
+    <tr><th>View</th><th>What it does</th><th>Use it when</th></tr>
+    <tr><td>Fit all</td><td>The largest size at which every screen fits in the window.</td><td>You want everything in view. This is the default.</td></tr>
+    <tr><td>Large</td><td>Each screen as big as the window allows. Scroll sideways between them. Percentages differ in this view.</td><td>You want to look closely at one screen at a time.</td></tr>
+    <tr><td>Actual size</td><td>Every screen life-size, at exactly 100%.</td><td>You want to judge how big things really are, such as whether a button is easy to tap.</td></tr>
+    <tr><td>Zoom slider</td><td>A size of your own, from 15% to 150%.</td><td>None of the above suits.</td></tr>
+  </table>
+
+  <h3>One screen on its own</h3>
+  <p>Type a value into the percentage beside a screen's name. That screen keeps its own size while the others follow the slider, and its percentage is highlighted. Click the small × beside it to make it follow the slider again.</p>
+
+  <h3>How the app knows the size of your display</h3>
+  <p>Life-size drawing depends on the physical size of your display, and this is automatic. Each monitor reports its own size in millimetres. The app reads that for every connected display and uses the one its window is on.</p>
+  <ul>
+    <li>Move the window to another monitor and the scale follows.</li>
+    <li>Plug a monitor in or take one out and the sizes are read again.</li>
+    <li>The sizes are remembered, so they are in place from the first moment on later starts.</li>
+  </ul>
+  <div class="tip"><b>Check it once</b>Choose Actual size and hold a real phone against the matching screen. They should be the same size. If not, open Settings (the sliders icon) and type your display's diagonal size in inches. That applies to that display only, and "Use the detected size" undoes it. A few monitors, some televisions and projectors among them, report no size or a wrong one; the app then estimates and says so.</div>
+</section>
+
+<section>
+  <h2>6. Keeping the screens in step</h2>
+  <p>Three switches under <strong>Sync</strong> in the second bar decide what is repeated on the other screens. All are on to begin with.</p>
+  <table class="wrap">
+    <tr><th>Switch</th><th>What follows on the other screens</th></tr>
+    <tr><td>Scroll</td><td>Scrolling. Screens line up on the same section of the page, not the same percentage scrolled, because a page is much taller on a phone than on a laptop.</td></tr>
+    <tr><td>Navigation</td><td>Following a link or moving to another page.</td></tr>
+    <tr><td>Clicks, typing &amp; hover</td><td>Clicks, text typed into fields, ticked boxes, and mouse hover effects.</td></tr>
+  </table>
+
+  <h3>Good to know</h3>
+  <ul>
+    <li><strong>Clicks rely on matching page structure.</strong> A click is repeated by finding the same element on the other screens. If the phone layout uses different elements from the desktop one, for example a menu button instead of a row of links, that click is not repeated there. Click it on that screen directly.</li>
+    <li><strong>Hover on touch screens.</strong> Many sites only apply hover effects on devices with a mouse. On the phone and tablet screens such effects correctly do not appear; the laptop screen is the one that should always react.</li>
+    <li><strong>The mouse pointer</strong> stays a normal pointer. To make it behave as a finger on the phone and tablet screens (drag to scroll, taps sent as touch), turn on <strong>Touch input</strong>. A round cursor shows while it is on.</li>
+    <li><strong>Turn a switch off</strong> when you want to look at one screen without moving the others.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>7. Review notes and the report</h2>
+  <p class="lead">Write notes on what you see while you review, then turn them into a PDF report with pictures.</p>
+
+  <h3>Adding a note</h3>
+  <ol class="steps">
+    <li>Under the screen you are looking at, press the <strong>note</strong> button (a speech bubble with a plus). The screen gets a tint and a crosshair.</li>
+    <li><strong>Click</strong> the spot you mean, or <strong>drag</strong> a rectangle over the area.</li>
+    <li>Type your comment and choose <strong>Save note</strong>, or press <kbd>Ctrl</kbd> + <kbd>Enter</kbd>. A picture of that screen, as it is at that moment, is kept with the note.</li>
+    <li>Carry on. Scroll, move to other pages and add as many notes as you like, on any screen.</li>
+  </ol>
+  <figure>
+    <img src="img/note.png" alt="Placing a note on the iPhone screen">
+    <figcaption>An area marked on the iPhone, with the note box open.</figcaption>
+  </figure>
+  <p><strong>Note anywhere</strong>, in the second bar, works the same way on the whole app window instead of one device. Use it to mark something that spans several screens, such as the same header compared on two phones. It covers the app window only, not other programs.</p>
+  <p>A red dot on a report button means there are notes waiting.</p>
+</section>
+
+<section>
+  <h3 style="margin-top:0">Reviewing before the report</h3>
+  <p>Press the <strong>report</strong> button (the page icon) under a screen for that device's notes, or <strong>Review notes</strong> in the second bar for all of them. A review screen opens. Nothing is created yet.</p>
+  <figure>
+    <img src="img/review.png" alt="The review screen">
+    <figcaption>The review screen lists each note with its picture and marker.</figcaption>
+  </figure>
+  <ul>
+    <li><strong>Reword a comment</strong> by typing in it. It saves when you click elsewhere.</li>
+    <li><strong>Discard</strong> a note you no longer want.</li>
+    <li><strong>Enlarge a picture</strong> by clicking it. Zoom with the − and + buttons, by clicking a point, or with <kbd>Ctrl</kbd> + mouse wheel, up to six times. <kbd>Esc</kbd> closes the picture.</li>
+    <li>Choose <strong>Create PDF report</strong> when you are happy, or <strong>Close</strong> to carry on reviewing.</li>
+  </ul>
+  <figure class="narrow">
+    <img src="img/zoom.png" alt="A picture enlarged">
+    <figcaption>A note's picture enlarged, with its marker.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h3 style="margin-top:0">The report</h3>
+  <p>The PDF is saved in the <code>Reports</code> subfolder of your output folder. Click the message that appears to open it.</p>
+  <div class="two">
+    <figure style="margin:0">
+      <img src="img/report.png" alt="The first page of a report">
+      <figcaption>The first page of a report.</figcaption>
+    </figure>
+    <div>
+      <p>It opens with the site, the date and the counts, then a table of the devices. Each note follows in its own box with:</p>
+      <ul>
+        <li>the note's number and your comment,</li>
+        <li>a drawing of the device as it appears in the app, with a numbered marker where you clicked or dragged,</li>
+        <li>a close-up of the marked spot or area,</li>
+        <li>the page title, address and time.</li>
+      </ul>
+      <p>Pages are numbered.</p>
+      <p>A report for all screens lists every device that was on show, including those with no notes, so "Devices reviewed" is the number you looked at.</p>
+    </div>
+  </div>
+  <div class="warn" style="margin-top:6mm"><b>Creating a report clears its notes</b>A device's report removes that device's notes from the app; the all-screens report removes every note. The notes live on in the PDF. A report cannot be created again once its notes are gone, so open the PDF and check it before moving on. Until they are reported or discarded, notes are kept, including after you close the app.</div>
+</section>
+
+<section>
+  <h2>8. Screenshots and video</h2>
+  <h3>Screenshots</h3>
+  <ul>
+    <li>The <strong>camera</strong> button under a screen saves a picture of that screen.</li>
+    <li><strong>Screenshot all</strong>, in the second bar, saves one of every visible screen.</li>
+  </ul>
+  <p>Pictures are saved in the <code>Screenshots</code> subfolder. They show what the device is showing, not the whole scrolling page. A screen flickers for a moment while its picture is taken, because it is redrawn at full size to make the picture sharp.</p>
+
+  <h3>Video</h3>
+  <table class="wrap">
+    <tr><th>Button</th><th>What is recorded</th></tr>
+    <tr><td>Record, in the top bar</td><td>The whole app window, toolbars included.</td></tr>
+    <tr><td>Record, under a screen</td><td>That device only, cut to its body. It stays on that device even if you scroll the row or change the zoom while recording.</td></tr>
+  </table>
+  <ol class="steps">
+    <li>Press a record button. The app asks you to confirm.</li>
+    <li>While recording, the button turns red and the time shows in the top bar. Use the app as normal.</li>
+    <li>Press the button again to stop. The video is saved in the <code>Videos</code> subfolder.</li>
+  </ol>
+  <p>Videos are <code>.webm</code> files, which play in web browsers, VLC and the Windows Media Player app. There is no sound. A recording of one device carries that device's name. Only one recording runs at a time.</p>
+  <div class="tip"><b>For a sharper video of one device</b>A single device is recorded at the size it is drawn on screen. Switch to Large or Actual size before recording.</div>
+  <div class="warn"><b>Blank recordings</b>If the display is asleep or locked, Windows provides blank frames and the video would be plain white. The app checks a second into a recording and warns you if the picture is blank.</div>
+</section>
+
+<section>
+  <h2>9. Testing conditions and layout checks</h2>
+  <h3>Conditions the page is tested under</h3>
+  <table class="wrap">
+    <tr><th>Control</th><th>What it does</th></tr>
+    <tr><td>Page theme</td><td>Tells the page the visitor prefers a light or a dark theme, so you can check both.</td></tr>
+    <tr><td>Network</td><td>Simulates Fast 4G, Slow 4G, Slow 3G or Offline on every screen.</td></tr>
+    <tr><td>Reduced motion</td><td>Tells the page the visitor prefers less animation.</td></tr>
+    <tr><td>Touch input</td><td>Makes the mouse act as a finger on the phone and tablet screens.</td></tr>
+  </table>
+  <p class="muted">Page theme is separate from the sun or moon button, which changes the appearance of Multi Screens itself.</p>
+
+  <h3>Checking a layout</h3>
+  <table class="wrap">
+    <tr><th>Tool</th><th>What it does</th></tr>
+    <tr><td>Outlines</td><td>Draws a line around every element, which makes spacing and alignment easy to see.</td></tr>
+    <tr><td>Find overflow</td><td>Highlights the elements that make a screen scroll sideways, and tells you how many pixels too wide each screen is.</td></tr>
+    <tr><td>Error number</td><td>A red number beside a screen's name counts the errors the page has logged. Click it to open developer tools.</td></tr>
+    <tr><td>Developer tools</td><td>Opens the browser's inspector for one screen. That screen's device behaviour pauses while it is open and returns when you close it.</td></tr>
+    <tr><td>Wrap</td><td>Lets the screens flow onto several rows instead of one.</td></tr>
+  </table>
+
+  <h3>Starting clean</h3>
+  <p><strong>Clear site data</strong> deletes cookies, sign-in sessions and stored data for the pages you have been viewing, after asking you to confirm. Use it to test as a first-time visitor. It does not delete saved logins, history or notes.</p>
+</section>
+
+<section>
+  <h2>10. History, saved logins and settings</h2>
+  <h3>History</h3>
+  <p>The clock button lists the pages you have opened, newest first, with their titles. Click one to open it on every screen. The address bar also suggests past addresses as you type. <strong>Clear all</strong> empties the list. Up to 300 pages are kept.</p>
+
+  <h3>Saved logins</h3>
+  <p>The key button stores sign-in details so you do not retype them while testing.</p>
+  <ol class="steps">
+    <li>Open the key panel. The <strong>Site</strong> box is filled in with the site you are on.</li>
+    <li>Enter the username and password and choose <strong>Save login</strong>.</li>
+    <li>Later, open the sign-in page, open the key panel and choose <strong>Fill</strong>. The details are typed into the form on every screen showing that site. Then press the site's own sign-in button.</li>
+  </ol>
+  <div class="warn"><b>How saved logins are protected</b>Passwords are encrypted with your Windows account before they are written to disk, so the file cannot be read by another Windows user or on another computer. A login is only filled into pages of the exact site it was saved for. Anyone who can use your unlocked Windows account can open the app and fill a saved login, so do not save logins on a shared account.</div>
+
+  <h3>Settings</h3>
+  <figure>
+    <img src="img/settings.png" alt="The Settings panel">
+    <figcaption>Settings: the display size used for life-size drawing, and the output folder.</figcaption>
+  </figure>
+  <ul>
+    <li><strong>This display:</strong> shows the display's name and the size the monitor reports. Type a different size to override it for that display.</li>
+    <li><strong>Output folder:</strong> shows where files are saved, with buttons to open it and to change it. Changing it does not move files already saved.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>11. Shortcuts and where files go</h2>
+  <h3>Keyboard shortcuts</h3>
+  <table>
+    <tr><th>Keys</th><th>Action</th></tr>
+    <tr><td><kbd>F5</kbd> or <kbd>Ctrl</kbd> + <kbd>R</kbd></td><td>Reload all screens</td></tr>
+    <tr><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd></td><td>Reload all screens without the cache. Shift-clicking the reload button does the same.</td></tr>
+    <tr><td><kbd>Ctrl</kbd> + <kbd>L</kbd></td><td>Jump to the address bar</td></tr>
+    <tr><td><kbd>Ctrl</kbd> + <kbd>Enter</kbd></td><td>Save the note being written</td></tr>
+    <tr><td><kbd>Ctrl</kbd> + mouse wheel</td><td>Zoom the enlarged picture of a note</td></tr>
+    <tr><td><kbd>Esc</kbd></td><td>Close a panel or the enlarged picture, or cancel a note being placed</td></tr>
+  </table>
+
+  <h3>Where things are saved</h3>
+  <table class="wrap">
+    <tr><th>What</th><th>Where</th></tr>
+    <tr><td>Screenshots</td><td><code>Screenshots</code> in your output folder</td></tr>
+    <tr><td>Videos</td><td><code>Videos</code> in your output folder</td></tr>
+    <tr><td>Review reports</td><td><code>Reports</code> in your output folder</td></tr>
+    <tr><td>Notes not yet reported</td><td><code>%APPDATA%\Multi Screens\review</code></td></tr>
+    <tr><td>Saved logins, encrypted</td><td><code>%APPDATA%\Multi Screens\logins.json</code></td></tr>
+    <tr><td>Settings, history, sign-in sessions</td><td><code>%APPDATA%\Multi Screens</code></td></tr>
+  </table>
+  <p>To find that folder, paste <code>%APPDATA%\Multi Screens</code> into the address bar of File Explorer.</p>
+  <div class="tip"><b>Starting over</b>Deleting the <code>%APPDATA%\Multi Screens</code> folder while the app is closed resets it completely, including saved logins, history and unreported notes. Files in your output folder are not affected.</div>
+</section>
+
+<section>
+  <h2>12. Limits and troubleshooting</h2>
+  <h3>What it does not do</h3>
+  <ul>
+    <li><strong>It is not Safari.</strong> Every screen uses the Chromium engine. Faults that only occur in Safari on a real iPhone or iPad will not appear.</li>
+    <li><strong>It cannot run native apps.</strong> Apps installed from an app store do not run in it. To see a real Android phone on your computer, a screen-mirroring tool is the usual choice.</li>
+    <li><strong>Safe areas are not reported.</strong> A page that asks the device how much room the camera cut-out takes receives zero, so it will not add that padding here.</li>
+    <li><strong>Screenshots show the visible screen,</strong> not the whole scrolling page.</li>
+    <li><strong>Notes cover the app window only,</strong> not other programs or the desktop.</li>
+    <li><strong>Windows only.</strong> There is no macOS or Linux version yet.</li>
+  </ul>
+
+  <h3>If something is not right</h3>
+  <table class="wrap">
+    <tr><th>What you see</th><th>What to do</th></tr>
+    <tr><td>"Windows protected your PC" on first run</td><td>Choose More info, then Run anyway. The app is not code-signed.</td></tr>
+    <tr><td>A page will not load</td><td>Check the address, and that you are online. The Network control may be set to Offline.</td></tr>
+    <tr><td>A click is not repeated on another screen</td><td>That screen's layout uses a different element. Click it there directly.</td></tr>
+    <tr><td>Sizes do not match a real phone at 100%</td><td>Open Settings and correct the display size. See section 5.</td></tr>
+    <tr><td>A device stops behaving like a phone</td><td>Its developer tools are open. Close them.</td></tr>
+    <tr><td>The pointer is a round dot</td><td>Touch input is on. Turn it off in the second bar.</td></tr>
+    <tr><td>A video is plain white</td><td>The display was asleep or locked. Wake it and record again.</td></tr>
+    <tr><td>You cannot find a screenshot, video or report</td><td>Press the folder button in the top bar.</td></tr>
+    <tr><td>An old review's notes appear in a new report</td><td>Notes stay until reported or discarded. Open Review notes and discard them first.</td></tr>
+  </table>
+  <p class="muted" style="margin-top:8mm">Multi Screens 1.6.1, published by SCAFFApps. This handbook describes that version.</p>
+</section>
+
+</body>
+</html>

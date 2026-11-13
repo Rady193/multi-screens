@@ -1,0 +1,22 @@
+Multi Screens
+Copyright (c) 2026 SCAFFApps. All rights reserved.
+
+You may download, install and use the released Multi Screens program (the
+installer and portable files on this repository's Releases page) free of
+charge, for personal or business use.
+
+The source code in this repository is published for reference only. Without
+written permission from SCAFFApps you may not copy, modify, merge, publish,
+distribute, sublicense or sell the source code or the program, in whole or in
+part, or works based on them.
+
+THE PROGRAM IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+SCAFFAPPS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE PROGRAM OR THE USE OR OTHER DEALINGS IN THE PROGRAM.
+
+The program includes third-party components (Electron and Chromium) under their
+own licences; see LICENSE.electron.txt and LICENSES.chromium.html in the
+installed program's folder.

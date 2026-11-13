@@ -1,0 +1,15 @@
+# Installed packages and build output (the installers go on the GitHub Releases page, not in the repository)
+node_modules/
+release/
+dist/
+
+# Logs and local clutter
+npm-debug.log*
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# OneDrive / sync conflict copies
+*-ROG.*
+*-DESKTOP-*.*
