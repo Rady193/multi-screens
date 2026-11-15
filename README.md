@@ -301,6 +301,17 @@ Notes:
 - macOS and Linux builds are configured (`npm run dist:mac`, `npm run dist:linux`) but must be run on a Mac or a Linux machine respectively. They have not been built or tested. Display-size detection is Windows-only; elsewhere 15.6 inches is assumed until changed in Settings.
 - To change the icon, edit `build/icon.svg` and run `node_modules\electron\dist\electron.exe build\make-icon.js`; it regenerates `build/icon.png`, `build/icon.ico` and `app/icon.png` from it.
 
+### The handbook
+
+`Multi Screens Handbook.pdf`, in the SCAFFApps brochure style, and a copy named for the release in `release/` (`Multi-Screens-Handbook-<version>.pdf`, the name the SCAFFApps Suite looks for):
+
+```bash
+python handbook\build_handbook.py              # retakes the pictures, then prints
+python handbook\build_handbook.py --no-shots   # prints with the pictures as they are; --preview also writes page PNGs
+```
+
+It needs this project's `node_modules`, Python with `playwright`, `pillow` and `pypdfium2`, and Microsoft Edge. The pictures are taken from Multi Screens itself, run from this folder in a test profile of its own, showing the sample site in `handbook/demo` (served as `localhost:3000`); a stand-in for GitHub shows the update offer, and the installed copy is used for that picture when there is one. Before every picture, the Windows user's folder and the computer's name are replaced by examples. Every word and the layout are in `handbook/handbook.html`; `handbook/kit.py`, `brochure.css` and `handbook.css` are the same in every SCAFFApps app.
+
 ## Project layout
 
 | Path | Purpose |
@@ -314,7 +325,8 @@ Notes:
 | `app/start.html` | The "Ready" page shown before an address is entered. |
 | `app/theme-early.js` | Applies the saved light or dark appearance before the window is first drawn. |
 | `build/` | Icon files and `make-icon.js`, which draws them from `icon.svg`; the packaging hook; and `installer.nsh`, the installer page that asks for the output folder and moves an install from the old folder. |
-| `release/` | Built installers. |
+| `handbook/` | The handbook: `handbook.html` (the pages), `build_handbook.py` (takes the pictures and prints the PDF), the shared `kit.py`, `brochure.css` and `handbook.css`, the pictures in `img/`, and the sample site in `demo/`. |
+| `release/` | Built installers and the handbook PDF for the release. |
 
 To add or change a device, edit the `DEVICES` list at the top of `app/renderer.js`. Each device's `phys` value is the width of its real screen in millimetres divided by its width in CSS pixels; it is what makes life-size drawing work.
 

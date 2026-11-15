@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in · Sample site</title>
+<style>
+  *{box-sizing:border-box} body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:#17141c;background:#fbf8f1}
+  header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:#fff;border-bottom:1px solid #ece3cf}
+  header b{font-size:16px} header a{background:#5b2c83;color:#fff;text-decoration:none;padding:7px 16px;border-radius:999px;font-weight:600;font-size:14px}
+  .hero{background:#5b2c83;color:#fff8e6;padding:36px 20px 40px}
+  .hero h1{margin:0 0 8px;font-size:clamp(26px,5vw,40px);line-height:1.15} .hero h1 span{color:#f0c33c} .hero p{margin:0;opacity:.85}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;padding:20px}
+  .card{background:#fff;border:1px solid #ece3cf;border-radius:14px;padding:18px}
+  .card i{display:block;width:40px;height:40px;border-radius:11px;margin-bottom:12px}
+  .card h3{margin:0 0 4px;font-size:17px} .card p{margin:0 0 14px;color:#675e72;font-size:14px}
+  .card a{display:inline-block;background:#17141c;color:#fff;text-decoration:none;padding:6px 14px;border-radius:8px;font-size:13px;font-weight:600}
+</style>
+<style>
+  main{display:grid;place-items:center;padding:40px 20px} form{width:min(360px,100%);background:#fff;border:1px solid #ece3cf;border-radius:16px;padding:24px}
+  h1{margin:0 0 16px;font-size:24px} label{display:block;margin:0 0 12px;font-weight:600;font-size:14px}
+  input{display:block;width:100%;margin-top:6px;padding:10px 12px;border:1px solid #d9cfba;border-radius:9px;font:inherit}
+  button{width:100%;padding:11px;border:0;border-radius:9px;background:#5b2c83;color:#fff;font:inherit;font-weight:600}
+</style></head>
+<body>
+<header><b>Sample site</b><a href="signin.html">Sign in</a></header>
+<main><form onsubmit="return false"><h1>Sign in</h1>
+<label>E-mail<input name="email" type="email" autocomplete="username"></label>
+<label>Password<input name="password" type="password" autocomplete="current-password"></label>
+<button>Sign in</button></form></main>
+</body></html>

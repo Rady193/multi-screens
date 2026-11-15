@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="24 24 464 464">
+  <rect x="24" y="24" width="464" height="464" rx="108" fill="#5B2C83"/>
+  <!-- the report page -->
+  <path d="M220 112h112l64 64v196a28 28 0 0 1-28 28H220a28 28 0 0 1-28-28V140a28 28 0 0 1 28-28z" fill="#FFF8E6"/>
+  <path d="M332 112v44a20 20 0 0 0 20 20h44z" fill="#45215F" fill-opacity=".25"/>
+  <path d="M236 336h96M236 368h60" stroke="#5B2C83" stroke-opacity=".45" stroke-width="16" stroke-linecap="round"/>
+  <!-- the snap in front of it: a picture inside selection corners -->
+  <rect x="104" y="176" width="200" height="132" rx="16" fill="#45215F" stroke="#FFF8E6" stroke-width="12"/>
+  <path d="M120 292l52-58 36 38 24-22 56 42z" fill="#FFF8E6"/>
+  <circle cx="254" cy="214" r="15" fill="#F0C33C"/>
+  <path d="M74 196v-28a22 22 0 0 1 22-22h28M284 146h28a22 22 0 0 1 22 22v28M334 288v28a22 22 0 0 1-22 22h-28M124 338H96a22 22 0 0 1-22-22v-28" fill="none" stroke="#F0C33C" stroke-width="16" stroke-linecap="round"/>
+  <!-- marker -->
+  <circle cx="364" cy="352" r="30" fill="#F0C33C" stroke="#5B2C83" stroke-width="10"/>
+</svg>

@@ -1,0 +1,69 @@
+/* The SCAFFApps app handbooks: what they add to the brochure's pages (brochure.css, as the SCAFFERP brochure).
+   The same file in every app's handbook folder. */
+
+/* the cover: the app's own picture on the concrete instead of the truck */
+.cover .logo-c img { border-radius: 0 }
+.cover .head p { max-width: 84mm }
+.cover .app { right: 9mm; top: 166mm; width: 116mm; height: 42mm; transform: rotate(-2.4deg); z-index: 4; background: #121314 }
+.cover .app img { object-position: center top }
+.cover .concrete { top: 126mm }
+
+/* Good to know: a white box with ticks */
+.gtk { background: #fff; outline: .35mm solid var(--ink); box-shadow: var(--shadow-s); padding: 4.5mm 5mm }
+.gtk h3 { margin-bottom: 2.4mm }
+.gtk li { font-size: 8.3pt; line-height: 1.45 }
+.gtk.gold { background: var(--gold) }
+.gtk.gold ul.ticks li::before { border-color: var(--ink) }
+
+/* a table: mono heads, ruled rows */
+.tbl { width: 100%; border-collapse: collapse; font-size: 8pt; line-height: 1.4 }
+.tbl th { font: 700 6.2pt/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--purple); text-align: left;
+  padding: 0 3mm 1.6mm 0; border-bottom: .35mm solid var(--ink); vertical-align: bottom }
+.tbl td { padding: 1.7mm 3mm 1.7mm 0; border-bottom: .3mm solid var(--line); vertical-align: top; color: var(--body) }
+.tbl td:first-child { color: var(--ink); font-weight: 650; white-space: nowrap }
+.tbl kbd, kbd { font: 600 7.2pt/1 var(--mono); background: #fff; border: .3mm solid var(--ink); padding: .5mm 1.4mm; white-space: nowrap; color: var(--ink) }
+.dark .tbl td { color: var(--on-dark-2); border-color: rgba(243,240,234,.18) } .dark .tbl td:first-child { color: #fff }
+.dark .tbl th { color: var(--gold); border-color: #fff }
+.tbl.tight td { padding-top: 1.15mm; padding-bottom: 1.15mm }   /* a reference page with several tables */
+
+/* numbered steps (hsteps: brochure.css has its own .steps) */
+.hsteps { list-style: none; margin: 0; padding: 0; counter-reset: st; display: grid; gap: 3mm }
+.hsteps.c2 { grid-template-columns: 1fr 1fr; gap: 3mm 6mm } .hsteps.c4 { grid-template-columns: repeat(4, 1fr); gap: 4mm }
+.hsteps li { counter-increment: st; display: grid; grid-template-columns: 8mm 1fr; gap: 2mm; font-size: 8.4pt; line-height: 1.45; color: var(--body) }
+.hsteps li::before { content: counter(st, decimal-leading-zero); font: 800 12pt/1 var(--mono); color: var(--purple); letter-spacing: -.04em }
+.hsteps li b { color: var(--ink); font-weight: 650 }
+.hsteps li > span > b:first-child { display: block; font: 800 9.4pt/1.3 var(--display); margin-bottom: .6mm }   /* the step's title */
+.hsteps.c4 li { grid-template-columns: 1fr; border-top: .35mm solid var(--ink); padding-top: 2mm }
+.dark .hsteps li { color: var(--on-dark-2) } .dark .hsteps li b { color: #fff }
+.dark figcaption b { color: #fff } .dark .hsteps li::before { color: var(--gold) }
+
+/* a picture that keeps its own shape (no crop), and a small one */
+.shot.fit img { height: auto; object-fit: contain }
+.shot.dark-bg { background: #121314 }
+.sub-h { font: 800 11pt/1.2 var(--display); letter-spacing: -.01em; color: var(--ink); margin: 0 0 1.6mm }
+.dark .sub-h { color: #fff }
+.note-p { font-size: 8.4pt; line-height: 1.5; color: var(--body); margin: 0 }
+.dark .note-p { color: var(--on-dark-2) }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm; align-items: start }
+.split.w { grid-template-columns: 1.25fr 1fr } .split.n { grid-template-columns: 1fr 1.25fr }
+.stack { display: flex; flex-direction: column; gap: 4mm; min-width: 0 }
+
+/* the back cover of a handbook: the SCAFFApps family (each icon cut to its tile, so all the same size) and the room
+   for the next ones; the stacked logo in the panel as large as the SCAFFERP brochure's */
+.back .family { position: absolute; right: 12mm; top: 84mm; width: 88mm; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm 2mm; z-index: 4 }
+.back .family div { display: flex; flex-direction: column; align-items: center; gap: 1.8mm; font: 700 5.8pt/1.25 var(--mono); letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink); text-align: center }
+.back .family img, .back .family .more { width: 17mm; height: 17mm; display: block; filter: drop-shadow(1.2mm 1.2mm 0 rgba(20,20,20,.9)) }
+.back .family .more { box-sizing: border-box; border: .6mm dashed var(--purple); border-radius: 4mm; background: rgba(243,240,234,.85);
+  display: grid; place-items: center; font: 800 18pt/1 var(--display); color: var(--purple); filter: none }
+.back .rule { z-index: 2 }   /* the lines over the concrete disc, solid all the way across (the brochure's truck hides that spot) */
+.back .end .lgs { width: 56mm }   /* as tall as the SCAFFERP brochure's logo, its icon the same size (about 22 mm) */
+.back .askgrid .shot { height: 24mm }   /* four views of the Suite, in the room the SCAFFERP brochure gives its four answers */
+
+/* a picture, or a row of them, that takes the room left on the page (the picture kept whole, centred) */
+.fill { flex: 1 1 auto; min-height: 0 }
+.split.fill, .g3.fill, .g2.fill, .g-2-1.fill { align-items: stretch }
+.split.fill > *, .g3.fill > *, .g2.fill > *, .g-2-1.fill > * { min-height: 0 }
+figure.fill { display: flex; flex-direction: column }
+figure.fill > .shot { flex: 1 1 auto; min-height: 30mm }
+figure.fill > .shot img { width: 100%; height: 100%; object-fit: contain; object-position: center }

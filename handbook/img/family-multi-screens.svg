@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="24 24 464 464">
+  <rect x="24" y="24" width="464" height="464" rx="108" fill="#5B2C83"/>
+  <!-- laptop screen at the back -->
+  <rect x="150" y="150" width="262" height="170" rx="18" fill="#FFF8E6" fill-opacity=".16" stroke="#FFF8E6" stroke-width="16"/>
+  <!-- tablet in the middle -->
+  <rect x="198" y="204" width="132" height="176" rx="18" fill="#5B2C83" stroke="#F0C33C" stroke-width="16"/>
+  <!-- phone in front -->
+  <rect x="100" y="232" width="92" height="160" rx="20" fill="#FFF8E6"/>
+  <rect x="130" y="250" width="32" height="9" rx="4.5" fill="#5B2C83"/>
+</svg>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample site</title>
+<style>
+  *{box-sizing:border-box} body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:#17141c;background:#fbf8f1}
+  header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:#fff;border-bottom:1px solid #ece3cf}
+  header b{font-size:16px} header a{background:#5b2c83;color:#fff;text-decoration:none;padding:7px 16px;border-radius:999px;font-weight:600;font-size:14px}
+  .hero{background:#5b2c83;color:#fff8e6;padding:36px 20px 40px}
+  .hero h1{margin:0 0 8px;font-size:clamp(26px,5vw,40px);line-height:1.15} .hero h1 span{color:#f0c33c} .hero p{margin:0;opacity:.85}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;padding:20px}
+  .card{background:#fff;border:1px solid #ece3cf;border-radius:14px;padding:18px}
+  .card i{display:block;width:40px;height:40px;border-radius:11px;margin-bottom:12px}
+  .card h3{margin:0 0 4px;font-size:17px} .card p{margin:0 0 14px;color:#675e72;font-size:14px}
+  .card a{display:inline-block;background:#17141c;color:#fff;text-decoration:none;padding:6px 14px;border-radius:8px;font-size:13px;font-weight:600}
+</style></head>
+<body>
+<header><b>Sample site</b><a href="signin.html">Sign in</a></header>
+<section class="hero"><h1>Everything <span>in one place</span></h1><p>A sample page for the Multi Screens handbook.</p></section>
+<section class="grid">
+  <div class="card"><i style="background:#f0c33c"></i><h3>Orders</h3><p>Track every order from request to delivery.</p><a href="orders.html">Open</a></div>
+  <div class="card"><i style="background:#5b2c83"></i><h3>Stock</h3><p>See what is in the yard and what is out on site.</p><a href="#">Open</a></div>
+  <div class="card"><i style="background:#45215f"></i><h3>People</h3><p>Attendance, leave and payroll together.</p><a href="#">Open</a></div>
+  <div class="card"><i style="background:#17141c"></i><h3>Reports</h3><p>Daily figures without the spreadsheets.</p><a href="#">Open</a></div>
+</section>
+</body></html>
