@@ -252,10 +252,10 @@ select:hover { border-color: var(--line-strong); }
 }
 #stage.wrap { flex-wrap: wrap; }
 /* SCAFFApps scrollbars, as the SCAFFERP system and www.scaffapps.com: a slim thumb on no track, wider under the
-   pointer; never the grey Windows bar with its arrows. Gold in the dark appearance, purple in the light one.
+   pointer; never the grey Windows bar with its arrows. Purple, stronger in the dark appearance to show on the dark grey.
    Touch screens keep their own. */
 @media (pointer: fine) {
-  :root { --sb-thumb: rgba(240, 195, 60, .8); --sb-thumb-on: #f0c33c; }
+  :root { --sb-thumb: rgba(91, 44, 131, .85); --sb-thumb-on: #5b2c83; }
   :root[data-theme="light"] { --sb-thumb: rgba(91, 44, 131, .55); --sb-thumb-on: rgba(91, 44, 131, .85); }
   ::-webkit-scrollbar { width: 12px; height: 12px; background: transparent; }
   ::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; }
