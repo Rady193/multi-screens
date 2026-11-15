@@ -2,7 +2,7 @@
 
 Multi Screens shows one web app side by side on several device screens, so you can review a page on a phone, a tablet and a laptop at the same time. What you do on one screen is repeated on the others.
 
-Version 1.7.0 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
+Version 1.7.1 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
 
 ## Contents
 
@@ -25,8 +25,8 @@ Download from the [Releases page](https://github.com/Rady193/multi-screens/relea
 
 | File | What it is |
 |---|---|
-| `Multi-Screens-Setup-1.7.0.exe` | Installer. Installs for everyone on the computer, in `C:\Program Files\Multi Screens` unless you choose another folder, so Windows asks for administrator permission once. Adds Start menu and desktop shortcuts, and can be removed from Windows Settings. |
-| `Multi-Screens-1.7.0-portable.exe` | Single file. Nothing is installed and no administrator permission is needed; copy it anywhere (including a USB stick) and double-click it. |
+| `Multi-Screens-Setup-1.7.1.exe` | Installer. Installs for everyone on the computer, in `C:\Program Files\Multi Screens` unless you choose another folder, so Windows asks for administrator permission once. Adds Start menu and desktop shortcuts, and can be removed from Windows Settings. |
+| `Multi-Screens-1.7.1-portable.exe` | Single file. Nothing is installed and no administrator permission is needed; copy it anywhere (including a USB stick) and double-click it. |
 
 The release notes list each file's SHA-256 checksum, so you can check a download with `Get-FileHash <file>` in PowerShell.
 
@@ -299,7 +299,7 @@ Notes:
 - With recent npm versions, `npm install` may skip Electron's download step. If `npm start` reports that Electron failed to install, run `node node_modules/electron/install.js` once. On Node.js 26 that script can also fail to unpack; in that case unzip the downloaded archive from `%LOCALAPPDATA%\electron\Cache` into `node_modules\electron\dist` and create `node_modules\electron\path.txt` containing `electron.exe`.
 - If the project is in a synced folder (OneDrive, Dropbox) and a build fails with a file-in-use error, pause syncing or build to a folder outside it: `npx electron-builder --win -c.directories.output=C:\some\other\folder`.
 - macOS and Linux builds are configured (`npm run dist:mac`, `npm run dist:linux`) but must be run on a Mac or a Linux machine respectively. They have not been built or tested. Display-size detection is Windows-only; elsewhere 15.6 inches is assumed until changed in Settings.
-- To change the icon, edit `build/icon.svg` and regenerate `build/icon.png`, `build/icon.ico` and `app/icon.png` from it.
+- To change the icon, edit `build/icon.svg` and run `node_modules\electron\dist\electron.exe build\make-icon.js`; it regenerates `build/icon.png`, `build/icon.ico` and `app/icon.png` from it.
 
 ## Project layout
 
@@ -312,7 +312,7 @@ Notes:
 | `app/index.html`, `app/style.css`, `app/renderer.js` | The app's interface, including the device list at the top of `renderer.js`. |
 | `app/start.html` | The "Ready" page shown before an address is entered. |
 | `app/theme-early.js` | Applies the saved light or dark appearance before the window is first drawn. |
-| `build/` | Icon files, the packaging hook, and `installer.nsh`, the installer page that asks for the output folder. |
+| `build/` | Icon files and `make-icon.js`, which draws them from `icon.svg`; the packaging hook; and `installer.nsh`, the installer page that asks for the output folder. |
 | `release/` | Built installers. |
 
 To add or change a device, edit the `DEVICES` list at the top of `app/renderer.js`. Each device's `phys` value is the width of its real screen in millimetres divided by its width in CSS pixels; it is what makes life-size drawing work.

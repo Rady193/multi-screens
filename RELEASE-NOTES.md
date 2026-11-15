@@ -1,5 +1,38 @@
 # Release notes
 
+## 1.7.1 — 15 November 2026
+
+A new icon in the SCAFFApps colours. Nothing else has changed.
+
+### Downloads
+
+| File | Size | SHA-256 |
+|---|---|---|
+| `Multi-Screens-Setup-1.7.1.exe` | 77.9 MB | `FA39DBED772F9A3C269705EA1C02DE7B506465CF5AEC051FAAD5230CD4FD2F72` |
+| `Multi-Screens-1.7.1-portable.exe` | 77.8 MB | `C25457D300EC363A0B2220B9AC7F476545E9795BE80A6D0F2556A0DF365CFB88` |
+| `Multi-Screens-Handbook-1.7.1.pdf` | 2.8 MB | `4E84C297AC1CE2755BAF8272B0966785CC2465168F4129410019EB5D7C545AE6` |
+
+Both programs are for 64-bit Windows 10 and 11 and are not code-signed, so Windows SmartScreen may ask for confirmation on first run.
+
+### Changed
+
+- **New icon.** The same picture, a phone, a tablet and a laptop, now in the SCAFFApps colours: a purple tile with cream and gold, like Instant Share and Smart Snap. It shows on the window, the taskbar, the Start menu and desktop shortcuts, the installer and the review report.
+- The handbook shows the new icon on its cover and in its pictures.
+- `build/make-icon.js` draws the icon files from `build/icon.svg`, as in Smart Snap.
+
+### Tested
+
+- The installer, the portable file and the program inside them carry the new icon (read back from the built files).
+- The portable file started with a fresh profile and showed the new icon in its window.
+
+### Not tested
+
+- Installing with the installer, and updating to this version from 1.7.0 in Settings.
+
+### Updating from 1.7.0
+
+Settings > Updates offers this version, and the daily check announces it. A shortcut pinned to the taskbar may keep the old picture until Windows refreshes its icons; unpinning it and pinning it again shows the new one.
+
 ## 1.7.0 — 15 November 2026
 
 Multi Screens can now check for a newer version and install it. Version 1.6.1 cannot update itself, so install this version by hand once; later versions can be installed from Settings.
