@@ -593,7 +593,8 @@ select:hover { border-color: var(--line-strong); }
   position: fixed;
   z-index: 20;
   width: 340px;
-  max-height: min(70vh, 560px);
+  /* as tall as the window allows below its button: it scrolls only on a short window (no scrolling where it can be helped) */
+  max-height: calc(100vh - 72px);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -815,7 +816,7 @@ button.small.icon-only svg.icon { width: 15px; height: 15px; }
 .update-line { margin: 0; font-size: 12.5px; line-height: 1.45; }
 .update-error { margin: 0; color: var(--danger); font-size: 12px; line-height: 1.45; }
 .update-notes {
-  max-height: 190px;
+  max-height: 340px;
   overflow: auto;
   padding: 8px 10px;
   background: var(--bg);
