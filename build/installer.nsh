@@ -76,6 +76,11 @@ FunctionEnd
     FileClose $0
     CreateDirectory "$OutputDir"
   ${EndIf}
+  ; Moved from the old default folder (customInit): the old version's uninstaller empties it but leaves the folder.
+  ; RMDir without /r removes it only when it is empty.
+  ${If} $INSTDIR != "$PROGRAMFILES64\${APP_FILENAME}"
+    RMDir "$PROGRAMFILES64\${APP_FILENAME}"
+  ${EndIf}
 !macroend
 
 !endif
