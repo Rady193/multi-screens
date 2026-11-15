@@ -1,5 +1,39 @@
 # Release notes
 
+## 1.8.0 — 16 November 2026
+
+Installed, not portable, in the SCAFFApps folder; the SCAFFApps colours; your name and e-mail asked once.
+
+### Downloads
+
+| File | Size | SHA-256 |
+|---|---|---|
+| `Multi-Screens-Setup-1.8.0.exe` | 78.0 MB | `58AE05371E9E762E9B35A9826CD90FA6550490682728A28638B7618C6122B49E` |
+
+For 64-bit Windows 10 and 11. Not code-signed, so Windows SmartScreen may ask for confirmation on first run.
+
+### Changed
+
+- **Installed only.** One installer, no portable file. New installs go to `C:\Program Files\SCAFFApps\Multi Screens`, with the Start menu shortcut in a **SCAFFApps** folder. A copy in `C:\Program Files\Multi Screens` moves there when it updates (Settings > Update now included); the old folder is removed.
+- **The SCAFFApps colours.** No more blue: buttons and switches in SCAFFApps purple, the active screen, its chip and the update dot in gold. The light appearance is white, with cream only behind the screens. The review report uses purple.
+- **Your name and e-mail, once.** The first SCAFFApps app to start on a Windows account asks for them; the others (the SCAFFApps Suite, Smart Snap, Instant Share) do not ask again. They are sent to SCAFFApps (`www.scaffapps.com`) with the app's name and version, the Windows version and a random number made for the Windows account. Nothing else is sent.
+- **The SCAFFApps Suite** installs, opens and updates Multi Screens.
+
+### Updating from 1.7
+
+- **Installed copy:** Settings > Updates > **Update now**. Windows asks for permission; the new version is installed in `C:\Program Files\SCAFFApps\Multi Screens` and opens.
+- **Portable copy:** there is no 1.8.0 portable file, so it offers only the release page. Run the installer once, then delete the portable file.
+
+### Tested
+
+- 1.7.1 installed, then 1.8.0 over it without pages, as Update now runs it: 1.8.0 in `C:\Program Files\SCAFFApps\Multi Screens`, the old folder and Start menu shortcut gone, Windows lists 1.8.0. Microsoft Defender finds nothing in the installer or the program.
+- From the source code with a fresh profile: the registration window first (empty details and a bad e-mail address refused), then the app; the registration reached a local copy of the website and the console's collector; Smart Snap, started next, did not ask again.
+- The dark and light appearances, looked over for any blue left.
+
+### Not tested
+
+- **Update now** from an installed 1.7 copy through Windows' permission prompt (the same installer run as above, started by hand).
+
 ## 1.7.1 — 15 November 2026
 
 A new icon in the SCAFFApps colours. Nothing else has changed.
