@@ -1,6 +1,6 @@
-const { app, BrowserWindow, ipcMain, webContents, shell, session, safeStorage, nativeImage, dialog, screen } = require('electron');
+const { app, BrowserWindow, ipcMain, webContents, shell, session, safeStorage, nativeImage, dialog, screen, net } = require('electron');
 const crypto = require('crypto');
-const { execFile } = require('child_process');
+const { execFile, spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const { pathToFileURL } = require('url');
@@ -969,9 +969,346 @@ ipcMain.handle('capture-save', (_e, token, name, full) => {
 
 ipcMain.handle('reveal', (_e, file) => shell.showItemInFolder(file));
 
+// ---- Updates ----------------------------------------------------------------
+// New versions are published as releases on GitHub. The app asks GitHub which
+// release is the latest. Only when the user chooses "Update now" does it
+// download the file that matches how it was installed (installer or portable),
+// check it against the SHA-256 checksums that GitHub and the release notes give
+// for it, and run it.
+const UPDATE_REPO = 'Rady193/multi-screens';
+const UPDATE_PAGE = `https://github.com/${UPDATE_REPO}/releases/latest`;
+// A stand-in for GitHub can be named for tests.
+const UPDATE_API = process.env.MULTI_SCREENS_UPDATE_API || `https://api.github.com/repos/${UPDATE_REPO}/releases/latest`;
+const UPDATE_EVERY = 24 * 60 * 60 * 1000;
+const UPDATE_AGENT = `MultiScreens/${app.getVersion()}`;
+const UPDATE_FILES = {
+  installed: /^Multi-Screens-Setup-\d+(\.\d+)*\.exe$/i,
+  portable: /^Multi-Screens-\d+(\.\d+)*-portable\.exe$/i,
+};
+// The installer starts the new version with this argument when it is done.
+const JUST_UPDATED = process.argv.includes('--updated');
+
+const update = {
+  state: 'idle',   // idle | checking | current | available | downloading | installing | error
+  latest: null,    // the newest release: { version, name, notes, page, published, asset }
+  progress: null,  // { received, total } while downloading
+  error: null,
+  checkedAt: 0,
+  replaced: null,  // after a portable update: what became of the old file
+};
+let updateAbort = null;
+
+// How this copy was installed decides what "Update now" downloads.
+function installKind() {
+  if (!app.isPackaged) return 'source';
+  if (process.platform !== 'win32') return 'other';
+  if (process.env.PORTABLE_EXECUTABLE_FILE) return 'portable';
+  if (fs.existsSync(path.join(path.dirname(process.execPath), 'Uninstall Multi Screens.exe'))) return 'installed';
+  return 'other';
+}
+
+function versionParts(v) {
+  return String(v).replace(/^v/i, '').split('-')[0].split('.').map((n) => parseInt(n, 10) || 0);
+}
+
+function isNewer(a, b) {
+  const x = versionParts(a);
+  const y = versionParts(b);
+  for (let i = 0; i < Math.max(x.length, y.length); i++) {
+    if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0);
+  }
+  return false;
+}
+
+// The checksum a download must have. GitHub works one out for every file it
+// holds, and the release notes list one per file; where both exist they must
+// agree. Returns null when there is none, 'mismatch' when they differ.
+function expectedChecksum(asset, notes) {
+  const sums = new Set();
+  const digest = /^sha256:([0-9a-f]{64})$/i.exec(asset.digest || '');
+  if (digest) sums.add(digest[1].toLowerCase());
+  for (const line of String(notes || '').split('\n')) {
+    if (!line.includes(asset.name)) continue;
+    const listed = /\b[0-9a-f]{64}\b/i.exec(line);
+    if (listed) sums.add(listed[0].toLowerCase());
+  }
+  if (!sums.size) return null;
+  return sums.size === 1 ? [...sums][0] : 'mismatch';
+}
+
+function updateMessage(err) {
+  const text = String((err && err.message) || err || '');
+  if (/ERR_INTERNET_DISCONNECTED|ERR_NAME_NOT_RESOLVED|ERR_CONNECTION|ERR_NETWORK|ERR_TIMED_OUT|ERR_PROXY/i.test(text)) {
+    return 'GitHub could not be reached. Check the internet connection and try again.';
+  }
+  return text || 'Something went wrong.';
+}
+
+function updateStatus() {
+  const l = update.latest;
+  const kind = installKind();
+  return {
+    current: app.getVersion(),
+    kind,
+    auto: loadSettings().updateAuto !== false,
+    state: update.state,
+    checkedAt: update.checkedAt || loadSettings().updateCheckedAt || 0,
+    latest: l && {
+      version: l.version,
+      name: l.name,
+      notes: l.notes,
+      published: l.published,
+      size: l.asset ? l.asset.size : 0,
+      // Why "Update now" cannot be offered, if it cannot.
+      manual: kind === 'source' ? 'source'
+        : kind === 'other' ? 'other'
+          : !l.asset ? 'no-file'
+            : !l.asset.sha256 || l.asset.sha256 === 'mismatch' ? 'unverified' : null,
+      file: l.asset ? l.asset.name : null,
+    },
+    progress: update.progress,
+    error: update.error,
+    justUpdated: JUST_UPDATED,
+    replaced: update.replaced,
+  };
+}
+
+function sendUpdate() {
+  const status = updateStatus();
+  for (const win of BrowserWindow.getAllWindows()) {
+    if (!win.isDestroyed()) win.webContents.send('update-status', status);
+  }
+}
+
+async function checkForUpdates() {
+  if (['checking', 'downloading', 'installing'].includes(update.state)) return updateStatus();
+  update.state = 'checking';
+  update.error = null;
+  sendUpdate();
+  try {
+    const res = await net.fetch(UPDATE_API, {
+      headers: { Accept: 'application/vnd.github+json', 'User-Agent': UPDATE_AGENT },
+      cache: 'no-store',
+    });
+    if (res.status === 403 || res.status === 429) throw new Error('GitHub is limiting how often it can be asked. Try again in an hour.');
+    if (res.status === 404) throw new Error('No release has been published yet.');
+    if (!res.ok) throw new Error(`GitHub answered with error ${res.status}. Try again later.`);
+    const release = await res.json();
+    const version = String(release.tag_name || '').replace(/^v/i, '');
+    if (!/^\d+(\.\d+)*$/.test(version)) throw new Error('The latest release has no version number.');
+    const pattern = UPDATE_FILES[installKind()];
+    const asset = pattern && (release.assets || []).find((a) => pattern.test(a.name || ''));
+    const page = /^https:\/\/github\.com\//.test(release.html_url || '') ? release.html_url : UPDATE_PAGE;
+    update.latest = {
+      version,
+      name: String(release.name || `Multi Screens ${version}`),
+      notes: String(release.body || ''),
+      page,
+      published: release.published_at || null,
+      asset: asset ? {
+        name: asset.name,
+        url: asset.browser_download_url,
+        size: Number(asset.size) || 0,
+        sha256: expectedChecksum(asset, release.body),
+      } : null,
+    };
+    update.state = isNewer(version, app.getVersion()) ? 'available' : 'current';
+    update.checkedAt = Date.now();
+    loadSettings().updateCheckedAt = update.checkedAt;
+    saveSettings();
+  } catch (err) {
+    // A newer version found by an earlier check is still on offer.
+    update.state = update.latest && isNewer(update.latest.version, app.getVersion()) ? 'available' : 'error';
+    update.error = updateMessage(err);
+  }
+  sendUpdate();
+  return updateStatus();
+}
+
+function sha256File(file) {
+  return new Promise((resolve) => {
+    const hash = crypto.createHash('sha256');
+    fs.createReadStream(file)
+      .on('error', () => resolve(null))
+      .on('data', (chunk) => hash.update(chunk))
+      .on('end', () => resolve(hash.digest('hex')));
+  });
+}
+
+// Downloads a release file into the first of the folders that can be written
+// to and returns its path. It is written under a temporary name and only
+// given its real name once its checksum is right.
+async function downloadVerified(asset, folders) {
+  let handle = null;
+  let dest = null;
+  for (const dir of folders) {
+    try {
+      fs.mkdirSync(dir, { recursive: true });
+      const candidate = path.join(dir, asset.name);
+      // Already downloaded by an earlier attempt that did not finish: use it.
+      if (fs.existsSync(candidate) && await sha256File(candidate) === asset.sha256) return candidate;
+      handle = await fs.promises.open(candidate + '.part', 'w');
+      dest = candidate;
+      break;
+    } catch { /* not writable: try the next folder */ }
+  }
+  if (!handle) throw new Error('There is no folder the update can be saved in.');
+  const part = dest + '.part';
+  updateAbort = new AbortController();
+  try {
+    const res = await net.fetch(asset.url, { headers: { 'User-Agent': UPDATE_AGENT }, signal: updateAbort.signal });
+    if (!res.ok || !res.body) throw new Error(`The download failed (error ${res.status}). Try again later.`);
+    const total = asset.size || Number(res.headers.get('content-length')) || 0;
+    const hash = crypto.createHash('sha256');
+    const reader = res.body.getReader();
+    let received = 0;
+    let shown = 0;
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      hash.update(value);
+      await handle.write(value);
+      received += value.length;
+      if (Date.now() - shown > 200) {
+        shown = Date.now();
+        update.progress = { received, total };
+        sendUpdate();
+      }
+    }
+    await handle.close();
+    handle = null;
+    if (total && received !== total) throw new Error('The download was incomplete. Try again.');
+    if (hash.digest('hex') !== asset.sha256) {
+      throw new Error('The downloaded file did not match its published checksum, so it was not used.');
+    }
+    fs.renameSync(part, dest);
+    return dest;
+  } catch (err) {
+    if (handle) await handle.close().catch(() => {});
+    try { fs.unlinkSync(part); } catch { /* already gone */ }
+    throw err;
+  } finally {
+    updateAbort = null;
+  }
+}
+
+// The installer needs administrator rights, so it is started through Windows,
+// which asks for permission first. It runs without its pages, closes this copy
+// if it is still open, and opens the new version when it is done.
+function runInstaller(file) {
+  const command = "try { Start-Process -FilePath $env:MULTI_SCREENS_SETUP -ArgumentList '--updated','/S','--force-run' -Verb RunAs -ErrorAction Stop } catch { exit 1 }";
+  return new Promise((resolve, reject) => {
+    execFile('powershell.exe', ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command', command],
+      { env: { ...process.env, MULTI_SCREENS_SETUP: file }, windowsHide: true },
+      (err) => (err
+        ? reject(new Error('The installer did not start. If Windows asked for permission and it was refused, choose Update now again.'))
+        : resolve()));
+  });
+}
+
+// A portable copy cannot delete itself while it runs: Windows holds its file
+// until it has closed. The new file is saved beside it and started instead,
+// and told which file it replaces so it can remove it (removeReplacedFile).
+function runPortable(file) {
+  return new Promise((resolve, reject) => {
+    const args = ['--updated', `--replaces=${process.env.PORTABLE_EXECUTABLE_FILE}`];
+    const child = spawn(file, args, { detached: true, stdio: 'ignore' });
+    child.once('error', () => reject(new Error(`The new version could not be started. It is saved at ${file}.`)));
+    child.once('spawn', () => { child.unref(); resolve(); });
+  });
+}
+
+// Run by the new portable version: moves the file it replaced to the Recycle
+// Bin. Only an older Multi Screens portable file in this file's own folder is
+// touched. The old copy may still be closing, so it keeps trying for a minute.
+const REPLACES = (process.argv.find((a) => a.startsWith('--replaces=')) || '').slice('--replaces='.length);
+
+async function removeReplacedFile() {
+  const own = process.env.PORTABLE_EXECUTABLE_FILE;
+  if (!REPLACES || installKind() !== 'portable' || !own) return;
+  const old = path.resolve(REPLACES);
+  const name = path.basename(old);
+  const version = (/^Multi-Screens-(\d+(?:\.\d+)*)-portable\.exe$/i.exec(name) || [])[1];
+  if (!version || !isNewer(app.getVersion(), version)) return;
+  const same = (a, b) => path.resolve(a).toLowerCase() === path.resolve(b).toLowerCase();
+  if (!same(path.dirname(old), path.dirname(own)) || same(old, own)) return;
+  for (let attempt = 0; attempt < 40; attempt++) {
+    if (!fs.existsSync(old)) return;
+    try {
+      await shell.trashItem(old);
+      update.replaced = { name, removed: true };
+      sendUpdate();
+      return;
+    } catch { /* still in use */ }
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+  }
+  update.replaced = { name, removed: false, path: old };
+  sendUpdate();
+}
+
+async function installUpdate() {
+  const l = update.latest;
+  const kind = installKind();
+  if (update.state !== 'available' || !l || !l.asset || !UPDATE_FILES[kind]) return updateStatus();
+  if (!l.asset.sha256 || l.asset.sha256 === 'mismatch') return updateStatus();
+  update.state = 'downloading';
+  update.error = null;
+  update.progress = { received: 0, total: l.asset.size };
+  sendUpdate();
+  let file;
+  try {
+    const folders = kind === 'portable'
+      ? [process.env.PORTABLE_EXECUTABLE_DIR || path.dirname(process.env.PORTABLE_EXECUTABLE_FILE), app.getPath('downloads')]
+      : [path.join(app.getPath('temp'), 'Multi Screens update')];
+    file = await downloadVerified(l.asset, folders);
+  } catch (err) {
+    update.state = 'available';
+    update.progress = null;
+    update.error = err && err.name === 'AbortError' ? null : updateMessage(err);
+    sendUpdate();
+    return updateStatus();
+  }
+  update.state = 'installing';
+  update.progress = null;
+  sendUpdate();
+  try {
+    if (kind === 'installed') await runInstaller(file);
+    else await runPortable(file);
+  } catch (err) {
+    update.state = 'available';
+    update.error = updateMessage(err);
+    sendUpdate();
+    return updateStatus();
+  }
+  // Give the interface a moment to say what is happening, then make way.
+  setTimeout(() => app.quit(), 1500);
+  return updateStatus();
+}
+
+ipcMain.handle('update-status', () => updateStatus());
+ipcMain.handle('update-check', () => checkForUpdates());
+ipcMain.handle('update-install', () => installUpdate());
+ipcMain.handle('update-cancel', () => { if (updateAbort) updateAbort.abort(); });
+ipcMain.handle('update-auto', (_e, on) => {
+  loadSettings().updateAuto = !!on;
+  saveSettings();
+  return updateStatus();
+});
+ipcMain.handle('update-page', () => shell.openExternal(update.latest ? update.latest.page : UPDATE_PAGE));
+
+// Checks a few seconds after start, then once a day while the app stays open,
+// unless automatic checks are turned off in Settings.
+function scheduleUpdateChecks() {
+  const auto = () => { if (loadSettings().updateAuto !== false) checkForUpdates(); };
+  setTimeout(auto, 8000);
+  setInterval(auto, UPDATE_EVERY);
+}
+
 app.whenReady().then(() => {
   watchDisplays();
   createWindow();
+  scheduleUpdateChecks();
+  removeReplacedFile();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });

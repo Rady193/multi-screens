@@ -36,6 +36,15 @@ contextBridge.exposeInMainWorld('multiScreens', {
     report: (deviceId, reviewed) => ipcRenderer.invoke('notes-report', deviceId, reviewed),
     open: (file) => ipcRenderer.invoke('notes-open', file),
   },
+  updates: {
+    status: () => ipcRenderer.invoke('update-status'),
+    check: () => ipcRenderer.invoke('update-check'),
+    install: () => ipcRenderer.invoke('update-install'),
+    cancel: () => ipcRenderer.invoke('update-cancel'),
+    setAuto: (on) => ipcRenderer.invoke('update-auto', on),
+    openPage: () => ipcRenderer.invoke('update-page'),
+    onStatus: (callback) => ipcRenderer.on('update-status', (_event, status) => callback(status)),
+  },
   saveVideo: (buffer, name) => ipcRenderer.invoke('save-video', buffer, name),
   mediaSourceId: () => ipcRenderer.invoke('media-source-id'),
   logins: {

@@ -991,8 +991,7 @@ function buildSettings(pop) {
     }));
 
   const where = h('p', { className: 'pop-path' });
-  const showFolder = async () => { where.textContent = (await api.output.get()).dir; };
-  showFolder();
+  const folderShown = api.output.get().then((info) => { where.textContent = info.dir; });
   pop.append(
     h('div', { className: 'pop-form' },
       h('strong', { textContent: 'Output folder' }),
@@ -1007,6 +1006,181 @@ function buildSettings(pop) {
       className: 'pop-note',
       textContent: 'Screenshots, videos and review reports are saved here, each in its own subfolder. Changing the folder does not move files already saved.',
     }));
+
+  const updates = h('div', { className: 'pop-form update-box' });
+  renderUpdates(updates);
+  pop.append(updates);
+  // Opened while a new version is waiting: show that part, which comes last
+  // (once the folder's path, which arrives a moment later, is in place).
+  if (updateWaiting()) folderShown.then(() => requestAnimationFrame(() => { pop.scrollTop = pop.scrollHeight; }));
+}
+
+// ---- Updates ------------------------------------------------------------------
+// The main process asks GitHub for the newest release. Settings shows the
+// answer, and the Settings button carries a dot while a newer version waits.
+
+let updateInfo = null;
+
+const megabytes = (bytes) => (bytes / 1048576).toFixed(1);
+const updateWaiting = () => !!updateInfo && ['available', 'downloading', 'installing'].includes(updateInfo.state);
+
+const UPDATE_HOW = {
+  installed: 'Windows asks for permission, then Multi Screens closes, installs the new version and opens again. Your settings, history, saved logins and notes are kept.',
+  portable: 'The new version is saved beside this file and opened in its place, and this file is moved to the Recycle Bin. A shortcut to this file will stop working; make one to the new file. Your settings, history, saved logins and notes are kept.',
+};
+
+// Shown when the app starts after an update, and again if the old portable
+// file is dealt with after that.
+function updatedMessage(s) {
+  const done = `Multi Screens has been updated to version ${s.current}.`;
+  if (!s.replaced) return done;
+  return s.replaced.removed
+    ? `${done} The old file, ${s.replaced.name}, was moved to the Recycle Bin.`
+    : `${done} The old file could not be removed; delete it yourself: ${s.replaced.path}`;
+}
+const UPDATE_MANUAL = {
+  source: 'This copy runs from source code, so it cannot update itself. Download the new version from the release page.',
+  other: 'This copy cannot update itself. Download the new version from the release page.',
+  'no-file': 'The release has no file for this kind of copy. Download it from the release page.',
+  unverified: 'The download could not be checked against a published checksum, so it is not installed automatically. Download it from the release page.',
+};
+
+function showUpdate(status) {
+  const before = updateInfo;
+  updateInfo = status;
+  const waiting = updateWaiting();
+  const button = $('settings-btn');
+  button.classList.toggle('has-update', waiting);
+  button.title = waiting ? `Settings: version ${status.latest.version} is available` : 'Settings';
+  const box = document.querySelector('#popover .update-box');
+  if (box) renderUpdates(box);
+  // Announced once per version; after that the dot is the reminder.
+  if (status.state === 'available' && (!before || before.state !== 'available')
+      && store.get('updateAnnounced', '') !== status.latest.version) {
+    store.set('updateAnnounced', status.latest.version);
+    toast(`Multi Screens ${status.latest.version} is available. Click here to see what is new.`, openUpdates);
+  }
+  if (before && status.replaced && !before.replaced) toast(updatedMessage(status));
+}
+
+function openUpdates() {
+  const pop = $('popover');
+  if (pop.hidden || pop.dataset.for !== 'settings-btn') togglePopover($('settings-btn'), buildSettings);
+}
+
+// Release notes are written in Markdown. Headings, lists, paragraphs, bold and
+// code are shown; the download table and the test record are left to the
+// release page.
+function releaseNotes(markdown) {
+  const inline = (text) => text.split(/(\*\*[^*]+\*\*|`[^`]+`)/).filter(Boolean).map((part) => {
+    if (part.length > 4 && part.startsWith('**') && part.endsWith('**')) return h('strong', { textContent: part.slice(2, -2) });
+    if (part.length > 2 && part.startsWith('`') && part.endsWith('`')) return h('code', { textContent: part.slice(1, -1) });
+    return document.createTextNode(part);
+  });
+  const box = h('div', { className: 'update-notes' });
+  let list = null;
+  let skip = false;
+  for (const raw of String(markdown || '').split(/\r?\n/)) {
+    const line = raw.trim();
+    const heading = /^#{1,6}\s+(.*)$/.exec(line);
+    if (heading) {
+      list = null;
+      skip = /^(downloads?|tested|not tested|seen once)/i.test(heading[1]);
+      if (!skip) box.append(h('h4', {}, ...inline(heading[1])));
+      continue;
+    }
+    if (!line) { list = null; continue; }
+    if (skip || line.startsWith('|')) continue;
+    const item = /^[-*]\s+(.*)$/.exec(line);
+    if (item) {
+      if (!list) { list = h('ul'); box.append(list); }
+      list.append(h('li', {}, ...inline(item[1])));
+    } else {
+      list = null;
+      box.append(h('p', {}, ...inline(line)));
+    }
+  }
+  return box.childNodes.length ? box : null;
+}
+
+function startUpdate() {
+  if (recorder) { toast('Stop the recording before updating.'); return; }
+  if (noting) { toast('Save or cancel the note you are placing before updating.'); return; }
+  api.updates.install();
+}
+
+function renderUpdates(box) {
+  const s = updateInfo;
+  box.replaceChildren(h('div', { className: 'update-head' },
+    h('strong', { textContent: 'Updates' }),
+    s ? h('span', { className: 'dim', textContent: `Version ${s.current}` }) : null));
+  if (!s) return;
+  const l = s.latest;
+  const row = (...buttons) => h('div', { className: 'note-editor-row' }, ...buttons);
+
+  if (s.state === 'available' && l) {
+    const released = l.published
+      ? ` Released ${new Date(l.published).toLocaleDateString([], { day: 'numeric', month: 'long', year: 'numeric' })}.`
+      : '';
+    box.append(h('p', { className: 'update-line' }, h('strong', { textContent: `Version ${l.version} is available.` }), released));
+    const notesBox = releaseNotes(l.notes);
+    if (notesBox) box.append(notesBox);
+    if (s.error) box.append(h('p', { className: 'update-error', textContent: s.error }));
+    const page = h('button', {
+      className: l.manual ? 'small primary' : 'small',
+      textContent: l.manual ? 'Open the release page' : 'Release page',
+      onclick: () => api.updates.openPage(),
+    });
+    if (!l.manual) {
+      box.append(
+        row(h('button', {
+          className: 'small primary',
+          textContent: `Update now${l.size ? ` (${megabytes(l.size)} MB)` : ''}`,
+          onclick: startUpdate,
+        }), page),
+        h('p', { className: 'pop-note', textContent: UPDATE_HOW[s.kind] || '' }));
+    } else {
+      box.append(row(page), h('p', { className: 'pop-note', textContent: UPDATE_MANUAL[l.manual] }));
+    }
+  } else if (s.state === 'downloading' && l) {
+    const p = s.progress || { received: 0, total: l.size };
+    const share = p.total ? Math.min(100, (p.received / p.total) * 100) : 0;
+    box.append(
+      h('p', {
+        className: 'update-line',
+        textContent: `Downloading version ${l.version}: ${megabytes(p.received)} of ${megabytes(p.total)} MB (${Math.floor(share)}%)`,
+      }),
+      h('div', { className: 'update-bar' }, h('span', { style: `width: ${share.toFixed(1)}%` })),
+      row(h('button', { className: 'small', textContent: 'Cancel', onclick: () => api.updates.cancel() })),
+      h('p', { className: 'pop-note', textContent: 'The file is checked against its published checksum before it is used.' }));
+  } else if (s.state === 'installing') {
+    box.append(h('p', {
+      className: 'update-line',
+      textContent: s.kind === 'portable'
+        ? 'Opening the new version. This window will close.'
+        : 'Starting the installer. Once Windows has your permission, Multi Screens closes and opens again when the update is done.',
+    }));
+  } else {
+    if (s.state === 'error') box.append(h('p', { className: 'update-error', textContent: s.error }));
+    else if (s.state === 'current') box.append(h('p', { className: 'update-line', textContent: 'You have the latest version.' }));
+    else if (s.state === 'checking') box.append(h('p', { className: 'update-line', textContent: 'Asking GitHub for the latest version…' }));
+    box.append(row(h('button', {
+      className: 'small',
+      textContent: s.state === 'checking' ? 'Checking…' : 'Check for updates',
+      disabled: s.state === 'checking',
+      onclick: () => api.updates.check(),
+    })));
+    if (s.checkedAt && s.state !== 'checking') {
+      box.append(h('p', { className: 'pop-note', textContent: `Last checked ${when(s.checkedAt)}.` }));
+    }
+  }
+
+  const auto = h('input', { type: 'checkbox', checked: s.auto });
+  auto.addEventListener('change', async () => showUpdate(await api.updates.setAuto(auto.checked)));
+  box.append(h('label', {
+    className: 'pop-check',
+    title: 'Ask GitHub for a newer version when the app starts, and once a day while it stays open. Nothing is downloaded until you choose Update now.',
+  }, auto, 'Check for updates automatically'));
 }
 
 // ---- Review notes -------------------------------------------------------------
@@ -1387,6 +1561,11 @@ async function init() {
   $('history-btn').addEventListener('click', () => togglePopover($('history-btn'), buildHistory));
   $('logins-btn').addEventListener('click', () => togglePopover($('logins-btn'), buildLogins));
   $('settings-btn').addEventListener('click', () => togglePopover($('settings-btn'), buildSettings));
+  showUpdate(await api.updates.status());
+  api.updates.onStatus(showUpdate);
+  if (updateInfo.justUpdated) {
+    setTimeout(() => toast(updatedMessage(updateInfo)), 1200);
+  }
   $('record-btn').addEventListener('click', () => toggleRecording(null));
   $('folder-btn').addEventListener('click', async () => {
     const result = await api.output.open();

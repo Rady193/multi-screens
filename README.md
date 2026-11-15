@@ -2,11 +2,12 @@
 
 Multi Screens shows one web app side by side on several device screens, so you can review a page on a phone, a tablet and a laptop at the same time. What you do on one screen is repeated on the others.
 
-Version 1.6.1 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
+Version 1.7.0 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
 
 ## Contents
 
 - [Install](#install)
+- [Updates](#updates)
 - [Quick start](#quick-start)
 - [The screens](#the-screens)
 - [Size and scale](#size-and-scale)
@@ -24,8 +25,8 @@ Download from the [Releases page](https://github.com/Rady193/multi-screens/relea
 
 | File | What it is |
 |---|---|
-| `Multi-Screens-Setup-1.6.1.exe` | Installer. Installs for everyone on the computer, in `C:\Program Files\Multi Screens` unless you choose another folder, so Windows asks for administrator permission once. Adds Start menu and desktop shortcuts, and can be removed from Windows Settings. |
-| `Multi-Screens-1.6.1-portable.exe` | Single file. Nothing is installed and no administrator permission is needed; copy it anywhere (including a USB stick) and double-click it. |
+| `Multi-Screens-Setup-1.7.0.exe` | Installer. Installs for everyone on the computer, in `C:\Program Files\Multi Screens` unless you choose another folder, so Windows asks for administrator permission once. Adds Start menu and desktop shortcuts, and can be removed from Windows Settings. |
+| `Multi-Screens-1.7.0-portable.exe` | Single file. Nothing is installed and no administrator permission is needed; copy it anywhere (including a USB stick) and double-click it. |
 
 The release notes list each file's SHA-256 checksum, so you can check a download with `Get-FileHash <file>` in PowerShell.
 
@@ -43,6 +44,20 @@ Everything the app produces goes into one folder that you choose:
 Inside that folder the app keeps three subfolders: `Screenshots`, `Videos` and `Reports`.
 
 To open the folder, press the **folder** button in the top bar. To change it, open **Settings** (the sliders icon) and choose **Change…**. Changing the folder does not move files already saved.
+
+## Updates
+
+From version 1.7.0 Multi Screens can check for a newer version and install it. Earlier versions cannot, so install 1.7.0 by hand once.
+
+- **Checking.** A few seconds after it starts, and once a day while it stays open, the app asks GitHub for the latest release. When a newer version exists, a message says so once and the **Settings** button (sliders icon) shows a blue dot until you update.
+- **By hand.** Open **Settings** and choose **Check for updates**. The Updates part also shows the version you have.
+- **What is new.** Settings shows the new version's release notes. **Release page** opens the full notes on GitHub.
+- **Update now** downloads the new version and checks it against the SHA-256 checksums published with the release: the one GitHub works out for the file and the one in the release notes. A file that does not match is discarded and nothing is installed.
+  - **Installed copy:** Windows asks for administrator permission. Multi Screens then closes, the new version is installed in the same folder without the installer's pages, and the app opens again.
+  - **Portable file:** the new file (for example `Multi-Screens-1.8.0-portable.exe`) is saved beside the one you are running and opened in its place. Once the old copy has closed, the new version moves the old file to the Recycle Bin, so it can still be restored. A shortcut to the old file stops working; make a new one to the new file. If the folder cannot be written to, the new file is saved in your Downloads folder instead and the old file is left where it is.
+- Settings, history, saved logins, review notes and the output folder are kept.
+- Stop a recording, and save or cancel a note you are placing, before updating.
+- **Turning checks off.** Clear **Check for updates automatically** in Settings. The app then contacts GitHub only when you choose **Check for updates**. A check is an ordinary web request that names the app and its version; nothing else is sent.
 
 ## Quick start
 
@@ -221,7 +236,7 @@ Things to know:
 - **Review notes** lists all notes and creates a report for all screens.
 - **Clear site data** deletes cookies, sign-in sessions and cache for the previewed pages, after asking for confirmation. It does not delete saved logins or history.
 - **Output folder** (folder icon in the top bar) opens the folder where screenshots, videos and reports are saved.
-- **Settings** (sliders icon) holds the display size used for life-size drawing and the output folder.
+- **Settings** (sliders icon) holds the display size used for life-size drawing, the output folder, and updates. A blue dot on it means a newer version is available.
 
 ## Keyboard shortcuts
 
@@ -244,6 +259,8 @@ Things to know:
 | Review notes and their screenshots | `%APPDATA%\Multi Screens\review` |
 | Saved logins (encrypted) | `%APPDATA%\Multi Screens\logins.json` |
 | Settings, history, last address, sign-in sessions for previewed sites | `%APPDATA%\Multi Screens` |
+| A downloaded update (installed copy) | `%TEMP%\Multi Screens update` |
+| A downloaded update (portable file) | Beside the portable file you ran, or in Downloads |
 
 Deleting the `%APPDATA%\Multi Screens` folder resets the app completely, including saved logins, history and review notes. Reports already created in Documents are not affected.
 

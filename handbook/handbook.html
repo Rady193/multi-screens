@@ -39,6 +39,7 @@
   figure { margin: 3mm 0 5mm; break-inside: avoid; }
   figure img { display: block; width: 100%; border: .3mm solid #d5dae6; border-radius: 2mm; }
   figure.narrow img { width: 62%; margin: 0 auto; }
+  figure.panel img { width: 46%; margin: 0 auto; }
   figcaption { margin-top: 1.6mm; color: #667085; font-size: 8.8pt; text-align: center; }
 
   .tip, .warn { margin: 3mm 0 4mm; padding: 3mm 4mm; border-radius: 2mm; break-inside: avoid; }
@@ -63,7 +64,7 @@
   <div class="sub">Handbook</div>
   <div class="line"></div>
   <p>Review one web app on a phone, a tablet and a laptop at the same time. Scroll, click and type once and every screen follows. Mark what is wrong, and hand over a report.</p>
-  <div class="meta">Version 1.6.1 · Windows 10 and 11 (64-bit)</div>
+  <div class="meta">Version 1.7.0 · Windows 10 and 11 (64-bit)</div>
 </div>
 
 <section>
@@ -78,7 +79,7 @@
     <li><b>7</b> Review notes and the report</li>
     <li><b>8</b> Screenshots and video</li>
     <li><b>9</b> Testing conditions and layout checks</li>
-    <li><b>10</b> History, saved logins and settings</li>
+    <li><b>10</b> History, saved logins, settings and updates</li>
     <li><b>11</b> Shortcuts and where files go</li>
     <li><b>12</b> Limits and troubleshooting</li>
   </ol>
@@ -99,8 +100,8 @@
   <p>Two files are provided. Use whichever suits you.</p>
   <table class="wrap">
     <tr><th>File</th><th>What it does</th></tr>
-    <tr><td>Multi-Screens-Setup-1.6.1.exe</td><td>Installer. Installs for everyone on the computer, in <code>C:\Program Files\Multi Screens</code> unless you choose another folder, so Windows asks for administrator permission once. It adds Start menu and desktop shortcuts, and can be removed later from Windows Settings.</td></tr>
-    <tr><td>Multi-Screens-1.6.1-portable.exe</td><td>A single file. Nothing is installed and no administrator permission is needed. Copy it anywhere, including a USB stick, and double-click it.</td></tr>
+    <tr><td>Multi-Screens-Setup-1.7.0.exe</td><td>Installer. Installs for everyone on the computer, in <code>C:\Program Files\Multi Screens</code> unless you choose another folder, so Windows asks for administrator permission once. It adds Start menu and desktop shortcuts, and can be removed later from Windows Settings.</td></tr>
+    <tr><td>Multi-Screens-1.7.0-portable.exe</td><td>A single file. Nothing is installed and no administrator permission is needed. Copy it anywhere, including a USB stick, and double-click it.</td></tr>
   </table>
   <p>No other software is needed.</p>
 
@@ -366,7 +367,7 @@
 </section>
 
 <section>
-  <h2>10. History, saved logins and settings</h2>
+  <h2>10. History, saved logins, settings and updates</h2>
   <h3>History</h3>
   <p>The clock button lists the pages you have opened, newest first, with their titles. Click one to open it on every screen. The address bar also suggests past addresses as you type. <strong>Clear all</strong> empties the list. Up to 300 pages are kept.</p>
 
@@ -382,12 +383,29 @@
   <h3>Settings</h3>
   <figure>
     <img src="img/settings.png" alt="The Settings panel">
-    <figcaption>Settings: the display size used for life-size drawing, and the output folder.</figcaption>
+    <figcaption>Settings: the display size used for life-size drawing, and the output folder. Updates come last; see below.</figcaption>
   </figure>
   <ul>
     <li><strong>This display:</strong> shows the display's name and the size the monitor reports. Type a different size to override it for that display.</li>
     <li><strong>Output folder:</strong> shows where files are saved, with buttons to open it and to change it. Changing it does not move files already saved.</li>
+    <li><strong>Updates:</strong> shows the version you have and checks for a newer one. See below.</li>
   </ul>
+
+  <h3>Updates</h3>
+  <p>From version 1.7.0 Multi Screens checks for a newer version itself and can install it. (Earlier versions cannot: install 1.7.0 by hand once.)</p>
+  <figure class="panel">
+    <img src="img/updates.png" alt="The Updates part of Settings">
+    <figcaption>The Updates part of Settings when a newer version is available. The version and notes shown are an example.</figcaption>
+  </figure>
+  <ul>
+    <li><strong>Checking:</strong> a few seconds after the app starts, and once a day while it stays open, it asks GitHub for the latest release. When there is a newer version, a message says so once, and the Settings button shows a blue dot until you update. <strong>Check for updates</strong> in Settings asks straight away.</li>
+    <li><strong>What is new:</strong> the release notes of the new version are shown in Settings. <strong>Release page</strong> opens the full notes on GitHub.</li>
+    <li><strong>Update now</strong> downloads the new version and checks it against the SHA-256 checksums published with it. A file that does not match is thrown away and nothing is installed.</li>
+    <li><strong>Installed with the installer:</strong> Windows asks for administrator permission. Multi Screens then closes, installs the new version in the same folder without showing the installer's pages, and opens again.</li>
+    <li><strong>The portable file:</strong> the new version is saved as its own file beside the one you ran and opened in its place. Once the old copy has closed, the new version moves the old file to the Recycle Bin, so it can still be restored. A shortcut to the old file stops working; make a new one to the new file. (If that folder cannot be written to, the new file goes to Downloads and the old one is left where it is.)</li>
+  </ul>
+  <p>Settings, history, saved logins, review notes and the output folder are kept. Stop a recording, and save or cancel a note you are placing, before you update.</p>
+  <div class="tip"><b>Turning the checks off</b>Clear <strong>Check for updates automatically</strong>. The app then contacts GitHub only when you choose Check for updates. A check is an ordinary web request that names the app and its version; nothing else is sent.</div>
 </section>
 
 <section>
@@ -412,6 +430,7 @@
     <tr><td>Notes not yet reported</td><td><code>%APPDATA%\Multi Screens\review</code></td></tr>
     <tr><td>Saved logins, encrypted</td><td><code>%APPDATA%\Multi Screens\logins.json</code></td></tr>
     <tr><td>Settings, history, sign-in sessions</td><td><code>%APPDATA%\Multi Screens</code></td></tr>
+    <tr><td>A downloaded update</td><td><code>%TEMP%\Multi Screens update</code> for an installed copy; beside the portable file, or in Downloads, for the portable one</td></tr>
   </table>
   <p>To find that folder, paste <code>%APPDATA%\Multi Screens</code> into the address bar of File Explorer.</p>
   <div class="tip"><b>Starting over</b>Deleting the <code>%APPDATA%\Multi Screens</code> folder while the app is closed resets it completely, including saved logins, history and unreported notes. Files in your output folder are not affected.</div>
@@ -442,7 +461,7 @@
     <tr><td>You cannot find a screenshot, video or report</td><td>Press the folder button in the top bar.</td></tr>
     <tr><td>An old review's notes appear in a new report</td><td>Notes stay until reported or discarded. Open Review notes and discard them first.</td></tr>
   </table>
-  <p class="muted" style="margin-top:8mm">Multi Screens 1.6.1, published by SCAFFApps. This handbook describes that version.</p>
+  <p class="muted" style="margin-top:8mm">Multi Screens 1.7.0, published by SCAFFApps. This handbook describes that version.</p>
 </section>
 
 </body>

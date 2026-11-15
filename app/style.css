@@ -784,6 +784,45 @@ button.small.icon-only svg.icon { width: 15px; height: 15px; }
 .pop-path { margin: 0; padding: 7px 9px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; font-size: 12px; overflow-wrap: anywhere; }
 :root[data-theme="light"] .pop-path { background: var(--surface-2); }
 
+/* Updates in Settings, and the dot on the Settings button while one waits */
+#settings-btn { position: relative; }
+#settings-btn.has-update::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--surface);
+}
+.update-head { display: flex; align-items: baseline; justify-content: space-between; }
+.update-head .dim { font-size: 12px; }
+.update-line { margin: 0; font-size: 12.5px; line-height: 1.45; }
+.update-error { margin: 0; color: var(--danger); font-size: 12px; line-height: 1.45; }
+.update-notes {
+  max-height: 190px;
+  overflow: auto;
+  padding: 8px 10px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+:root[data-theme="light"] .update-notes { background: var(--surface-2); }
+.update-notes h4 { margin: 8px 0 2px; font-size: 12px; }
+.update-notes h4:first-child { margin-top: 0; }
+.update-notes p { margin: 0 0 4px; }
+.update-notes ul { margin: 0 0 4px; padding-left: 16px; }
+.update-notes li { margin: 2px 0; }
+.update-notes code { font: 11px Consolas, monospace; }
+.update-bar { height: 6px; overflow: hidden; background: var(--surface-3); border-radius: 999px; }
+.update-bar span { display: block; height: 100%; background: var(--accent-strong); transition: width .2s; }
+.pop-form label.pop-check { flex-direction: row; align-items: center; gap: 8px; color: var(--text); cursor: pointer; }
+.pop-form .pop-check input { width: 15px; height: 15px; margin: 0; padding: 0; accent-color: var(--accent-strong); }
+
 /* ---- Top bar order ---------------------------------------------------------- */
 /* Devices sit on their own line under the address bar and its icons. */
 .row-break { flex-basis: 100%; height: 0; margin: -4px 0; }

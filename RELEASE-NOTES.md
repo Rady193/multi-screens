@@ -1,5 +1,41 @@
 # Release notes
 
+## 1.7.0 — 15 November 2026
+
+Multi Screens can now check for a newer version and install it. Version 1.6.1 cannot update itself, so install this version by hand once; later versions can be installed from Settings.
+
+### Downloads
+
+| File | Size | SHA-256 |
+|---|---|---|
+| `Multi-Screens-Setup-1.7.0.exe` | 78.1 MB | `4D46161DA4D1CC156AD4801E7E5AD395C44938489FA1E969CC98824034415740` |
+| `Multi-Screens-1.7.0-portable.exe` | 77.8 MB | `5B91F481B493B6EF34F5D5EAB08CE74CFCD0268831972D657BC176B96938A9D8` |
+
+Both are for 64-bit Windows 10 and 11 and are not code-signed, so Windows SmartScreen may ask for confirmation on first run.
+
+### Added
+
+- **Check for updates.** Settings has a new Updates part showing the version you have. **Check for updates** asks GitHub for the latest release. When there is a newer one, its release notes are shown with an **Update now** button and a link to the release page.
+- **Update now.** Downloads the new version and checks it against the SHA-256 checksums published with it (GitHub's own and the one in these notes); a file that does not match is discarded. An installed copy asks Windows for permission, closes, installs the new version in the same folder and opens again. A portable file saves the new version beside itself and opens it, and the new version moves the old file to the Recycle Bin once the old copy has closed. A shortcut to the old file stops working.
+- **Automatic checks.** The app checks a few seconds after it starts and once a day while it stays open. A newer version is announced once, and a blue dot on the Settings button stays until you update. **Check for updates automatically** in Settings turns this off; the app then contacts GitHub only when asked.
+- After an update, the app says which version it has been updated to.
+
+### Tested
+
+- Against a local stand-in for GitHub: a newer version was found on start, announced once, shown with its notes, and marked by the dot. "You have the latest version", the error shown when GitHub cannot be reached, and turning automatic checks off and on (saved between starts) were each seen.
+- Portable copy, built as 1.7.0: the download showed its progress, **Cancel** stopped it and left no partial file, a completed download was checked, saved beside the running file and started with `--updated` and the old file's path, and the running copy closed.
+- The new portable version, given the old file while that file was still running, waited until it had closed (8 seconds), then moved it to the Recycle Bin and said so. It left alone an older file in another folder, a newer version's file, and a file that is not a Multi Screens portable file.
+- A download whose content did not match its checksum was discarded with a message. A release whose two checksums disagreed offered only the release page.
+- The command that starts the installer passed a path with spaces and the arguments `--updated /S --force-run` correctly (tried without the administrator prompt), and reported a file that could not be started.
+- Starting with `--updated` showed "Multi Screens has been updated to version 1.7.0".
+- Against the real GitHub, the built 1.7.0 read the latest release (1.6.1) and reported "You have the latest version".
+
+### Not tested
+
+- **Updating an installed copy end to end**: the Windows permission prompt, the installer running without its pages, and the app reopening. This needs a person to approve the prompt, and a published release newer than the installed one.
+- Saving the portable update to Downloads when the portable file's folder cannot be written to.
+- Downloading a real update from GitHub, which needs a release after 1.7.0.
+
 ## 1.6.1 — 13 November 2026
 
 The first public release. Same features as 1.6.0; the installer is fixed and the program now carries its publisher's name.
