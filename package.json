@@ -25,6 +25,8 @@
     "copyright": "Copyright © 2026 SCAFFApps",
     "files": [
       "main.js",
+      "registration.js",
+      "registration-preload.js",
       "host-preload.js",
       "guest-preload.js",
       "app/**",

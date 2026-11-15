@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src file: data:">
+<title>Welcome</title>
+<!-- The SCAFFApps registration window (registration.js): the same page in every SCAFFApps app. -->
+<style>
+  :root { --bg: #191a1b; --field: #121314; --line: #333536; --text: #e6e6e6; --dim: #8c8c8c; --accent: #f0c33c;
+    --primary: #5b2c83; --primary-h: #45215f; --danger: #f48771; color-scheme: dark }
+  :root[data-theme="light"] { --bg: #ffffff; --field: #f6f5f8; --line: #e7e4ec; --text: #17141c; --dim: #6a6175;
+    --accent: #5b2c83; --primary: #5b2c83; --primary-h: #45215f; --danger: #e5484d; color-scheme: light }
+  * { box-sizing: border-box }
+  html, body { margin: 0; height: 100%; overflow: hidden }
+  body { background: var(--bg); color: var(--text); font: 13px/1.5 "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+    display: flex; flex-direction: column; -webkit-font-smoothing: antialiased }
+  main { flex: 1; padding: 28px 32px 14px; display: flex; flex-direction: column }
+  .icon { width: 56px; height: 56px; margin-bottom: 14px }
+  .kicker { font: 600 11px/1 "Cascadia Mono", Consolas, monospace; letter-spacing: .08em; color: var(--accent); text-transform: uppercase }
+  h1 { margin: 0 0 6px; font: 650 22px/1.2 "Segoe UI Variable Display", "Segoe UI", sans-serif; letter-spacing: -.01em }
+  .lead { margin: 0 0 18px; color: var(--dim); font-size: 13.5px }
+  label { display: block; margin-bottom: 14px; font-weight: 600; font-size: 12.5px }
+  input { display: block; width: 100%; height: 36px; margin-top: 6px; padding: 0 11px; border: 1px solid var(--line); border-radius: 8px;
+    background: var(--field); color: var(--text); font: inherit; font-size: 13.5px; font-weight: 400; outline: none }
+  input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(240, 195, 60, .18) }
+  :root[data-theme="light"] input:focus { box-shadow: 0 0 0 3px rgba(91, 44, 131, .14) }
+  .err { margin: -4px 0 12px; color: var(--danger); font-size: 12.5px }
+  button { width: 100%; height: 38px; margin-top: 4px; border: 0; border-radius: 8px; background: var(--primary); color: #fff;
+    font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer }
+  button:hover { background: var(--primary-h) }
+  button:disabled { opacity: .6; cursor: default }
+  .fine { margin: auto 0 0; padding-top: 14px; color: var(--dim); font-size: 11.5px; line-height: 1.5 }
+  footer { padding: 10px 32px 12px; border-top: 1px solid var(--line); color: var(--dim); font-size: 11px }
+  footer b { color: var(--text); font-weight: 600 }
+</style>
+</head>
+<body>
+<main>
+  <img class="icon" id="icon" alt="">
+  <h1 id="title">Welcome</h1>
+  <p class="lead">Before you start, please tell us who you are. You are asked only once.</p>
+  <form id="form" novalidate>
+    <label>Your name<input id="name" autocomplete="name" maxlength="150" autofocus></label>
+    <label>E-mail address<input id="email" type="email" autocomplete="email" maxlength="150"></label>
+    <p class="err" id="err" hidden></p>
+    <button id="go" type="submit">Continue</button>
+  </form>
+  <p class="fine">Your name and e-mail address are sent to SCAFFApps with this app's name and version and your Windows version,
+    so we know who uses our apps. Nothing else about you or this computer is sent. The other SCAFFApps apps on this Windows
+    account use the same details and do not ask again.</p>
+</main>
+<footer>Published by <b>SCAFFApps</b> · www.scaffapps.com</footer>
+<script>
+  const q = new URLSearchParams(location.search), $ = (id) => document.getElementById(id);
+  document.documentElement.dataset.theme = q.get('theme') === 'light' ? 'light' : 'dark';
+  const app = q.get('app') || 'SCAFFApps';
+  document.title = 'Welcome to ' + app; $('title').textContent = 'Welcome to ' + app;
+  if (q.get('icon')) $('icon').src = q.get('icon'); else $('icon').remove();
+  $('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = $('name').value.trim(), email = $('email').value.trim();
+    const say = (t, field) => { $('err').textContent = t; $('err').hidden = false; if (field) $(field).focus(); };
+    if (!name) return say('Please enter your name.', 'name');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return say('Please enter a valid e-mail address.', 'email');
+    $('go').disabled = true; $('err').hidden = true;
+    const r = await window.scaffapps.register({ name, email });
+    if (!r.ok) { $('go').disabled = false; say(r.error); }
+  });
+</script>
+</body>
+</html>

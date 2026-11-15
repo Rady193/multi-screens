@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, webContents, shell, session, safeStorage, n
 const crypto = require('crypto');
 const { execFile, spawn } = require('child_process');
 const path = require('path');
+const registration = require('./registration');
 const fs = require('fs');
 const { pathToFileURL } = require('url');
 
@@ -1304,7 +1305,11 @@ function scheduleUpdateChecks() {
   setInterval(auto, UPDATE_EVERY);
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  // the user's name and e-mail, asked once for every SCAFFApps app (registration.js); required
+  const who = await registration.ensure({ appId: 'multi-screens', appName: 'Multi Screens', version: app.getVersion(),
+    icon: path.join(__dirname, 'app', 'icon.png'), theme: loadSettings().appTheme });
+  if (!who) { app.quit(); return; }
   watchDisplays();
   createWindow();
   scheduleUpdateChecks();
