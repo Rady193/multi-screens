@@ -34,6 +34,8 @@
 .hsteps li b { color: var(--ink); font-weight: 650 }
 .hsteps li > span > b:first-child { display: block; font: 800 9.4pt/1.3 var(--display); margin-bottom: .6mm }   /* the step's title */
 .hsteps.c4 li { grid-template-columns: 1fr; border-top: .35mm solid var(--ink); padding-top: 2mm }
+.hsteps.c3 { grid-template-columns: repeat(3, 1fr); gap: 4mm 6mm } .hsteps.c3 li { grid-template-columns: 1fr; border-top: .35mm solid var(--ink); padding-top: 2mm }
+.dark .hsteps.c3 li, .dark .hsteps.c4 li { border-top-color: rgba(243,240,234,.55) }
 .dark .hsteps li { color: var(--on-dark-2) } .dark .hsteps li b { color: #fff }
 .dark figcaption b { color: #fff } .dark .hsteps li::before { color: var(--gold) }
 
