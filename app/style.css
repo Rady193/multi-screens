@@ -470,10 +470,10 @@ select:hover { border-color: var(--line-strong); }
 :root[data-theme="light"] {
   --bg: #fbf6ea;
   --surface: #ffffff;
-  --surface-2: #f7f1e4;
-  --surface-3: #eee5d3;
-  --line: #e9dfca;
-  --line-strong: #d6c8a9;
+  --surface-2: #f6f5f8;
+  --surface-3: #eceaf0;
+  --line: #e7e4ec;
+  --line-strong: #d4d0dc;
   --text: #17141c;
   --dim: #6a6175;
   --accent: #5b2c83;
@@ -481,18 +481,19 @@ select:hover { border-color: var(--line-strong); }
   --accent-soft: rgba(91, 44, 131, .1);
   --danger: #e5484d;
 }
-:root[data-theme="light"] .chrome { box-shadow: 0 6px 18px rgba(60, 40, 20, .08); }
-:root[data-theme="light"] .toolbar.tools { background: rgba(60, 40, 20, .025); }
+:root[data-theme="light"] .chrome { box-shadow: 0 6px 18px rgba(23, 20, 28, .08); }
+:root[data-theme="light"] .toolbar.tools { background: var(--surface); }
 :root[data-theme="light"] #url::placeholder { color: #a59bb0; }
-:root[data-theme="light"] .segmented button.on { background: #fff; box-shadow: 0 1px 3px rgba(60, 40, 20, .18); }
+:root[data-theme="light"] .segmented button.on { background: #fff; box-shadow: 0 1px 3px rgba(23, 20, 28, .18); }
 :root[data-theme="light"] .group.segmented, :root[data-theme="light"] #url-form { background: var(--surface-2); }
 :root[data-theme="light"] .chips .toggle:has(input:checked) { border-color: rgba(91, 44, 131, .4); }
 :root[data-theme="light"] .tools .toggle input::after { background: #fff; box-shadow: 0 0 0 1px var(--line-strong); }
 :root[data-theme="light"] .tools .toggle input:checked::after { box-shadow: none; }
-:root[data-theme="light"] #stage { background: radial-gradient(1200px 500px at 50% -10%, rgba(91, 44, 131, .06), transparent 70%), var(--bg); }
-:root[data-theme="light"] .frame { box-shadow: 0 0 0 1px #2e333d, 0 14px 30px rgba(60, 40, 20, .22); }
-:root[data-theme="light"] .pane.active .frame { box-shadow: 0 0 0 2px var(--accent), 0 14px 30px rgba(60, 40, 20, .22); }
-:root[data-theme="light"] #toast { box-shadow: 0 12px 30px rgba(60, 40, 20, .2); }
+:root[data-theme="light"] #stage { background: radial-gradient(1200px 500px at 50% -10%, rgba(91, 44, 131, .09), transparent 70%),
+  radial-gradient(rgba(91, 44, 131, .1) 1px, transparent 1.4px) 0 0 / 22px 22px, var(--bg); }
+:root[data-theme="light"] .frame { box-shadow: 0 0 0 1px #2e333d, 0 14px 30px rgba(23, 20, 28, .22); }
+:root[data-theme="light"] .pane.active .frame { box-shadow: 0 0 0 2px var(--accent), 0 14px 30px rgba(23, 20, 28, .22); }
+:root[data-theme="light"] #toast { box-shadow: 0 12px 30px rgba(23, 20, 28, .2); }
 
 /* The body hugs its screen even when the pane is wider (minimum width for buttons). */
 .frame { width: fit-content; margin: 0 auto; }
@@ -635,7 +636,7 @@ button.small.icon-only svg.icon { width: 15px; height: 15px; }
 }
 .pop-form input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
 .pop-form button.primary { height: 32px; align-self: flex-start; }
-:root[data-theme="light"] .popover { box-shadow: 0 18px 44px rgba(60, 40, 20, .2); }
+:root[data-theme="light"] .popover { box-shadow: 0 18px 44px rgba(23, 20, 28, .2); }
 :root[data-theme="light"] .pop-form input { background: var(--surface-2); }
 
 /* ---- Review notes --------------------------------------------------------- */
@@ -857,9 +858,9 @@ button.primary:hover { background: #45215f; }
 :root[data-theme="light"] .badge, :root[data-theme="light"] .count,
 :root[data-theme="light"] .report-btn[data-count]:not([data-count=""])::after { background: var(--danger); }
 :root[data-theme="light"] button.primary:hover { background: #45215f; }
-:root[data-theme="light"] .chrome { box-shadow: 0 6px 18px rgba(60, 40, 20, .08); }
-:root[data-theme="light"] .toolbar.tools { background: rgba(60, 40, 20, .025); }
-:root[data-theme="light"] .segmented button.on { background: #fff; box-shadow: 0 1px 3px rgba(60, 40, 20, .18); }
+:root[data-theme="light"] .chrome { box-shadow: 0 6px 18px rgba(23, 20, 28, .08); }
+:root[data-theme="light"] .toolbar.tools { background: var(--surface); }
+:root[data-theme="light"] .segmented button.on { background: #fff; box-shadow: 0 1px 3px rgba(23, 20, 28, .18); }
 
 /* ---- Motion ------------------------------------------------------------------ */
 .popover:not([hidden]), .note-editor:not([hidden]) { animation: pop-in .14s ease-out; }
@@ -987,8 +988,8 @@ html { color-scheme: dark; }
 button.discard { gap: 5px; color: var(--dim); background: transparent; border-color: var(--line); }
 button.discard:hover { color: var(--danger); border-color: var(--danger); background: transparent; }
 button.discard svg.icon { width: 14px; height: 14px; }
-:root[data-theme="light"] .review-modal { background: rgba(60, 40, 20, .35); }
-:root[data-theme="light"] .review-card { box-shadow: 0 24px 60px rgba(60, 40, 20, .25); }
+:root[data-theme="light"] .review-modal { background: rgba(23, 20, 28, .35); }
+:root[data-theme="light"] .review-card { box-shadow: 0 24px 60px rgba(23, 20, 28, .25); }
 :root[data-theme="light"] .review-item { background: var(--surface-2); }
 :root[data-theme="light"] .review-body textarea { background: #fff; }
 

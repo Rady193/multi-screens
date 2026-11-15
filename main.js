@@ -731,28 +731,28 @@ function reportHtml(list, deviceId, reviewed) {
   .brand img { width: 5.5mm; height: 5.5mm; }
   h1 { margin: 0 0 3mm; font-size: 20pt; letter-spacing: -.2pt; }
   .cards { display: flex; gap: 3mm; }
-  .cards div { flex: 1; min-width: 0; padding: 2.4mm 3.2mm; background: #f7f4ee; border: .25mm solid #e7e1d5; border-radius: 2.5mm; font-size: 10.5pt; font-weight: 600; overflow-wrap: anywhere; }
+  .cards div { flex: 1; min-width: 0; padding: 2.4mm 3.2mm; background: #f6f5f8; border: .25mm solid #e7e4ec; border-radius: 2.5mm; font-size: 10.5pt; font-weight: 600; overflow-wrap: anywhere; }
   .cards div:first-child { flex: 2; }
   .cards b { display: block; margin-bottom: .8mm; color: #6a6175; font-size: 7.5pt; font-weight: 600; letter-spacing: .4pt; text-transform: uppercase; }
   .sub { color: #6a6175; }
   table { width: 100%; margin-top: 4mm; border-collapse: collapse; font-size: 9.5pt; }
-  th, td { padding: 1.3mm 2mm; text-align: left; border-bottom: .2mm solid #e9dfca; }
+  th, td { padding: 1.3mm 2mm; text-align: left; border-bottom: .2mm solid #e7e4ec; }
   th { color: #6a6175; font-weight: 600; }
   h2 { margin: 6mm 0 3.5mm; padding: 0 0 2mm; font-size: 14pt; border-bottom: .5mm solid #5b2c83; break-after: avoid; }
   h2 small { color: #6a6175; font-size: 9pt; font-weight: 400; margin-left: 2mm; }
-  .note { display: flex; gap: 7mm; margin-bottom: 5mm; padding: 5mm; border: .3mm solid #e7e1d5; border-radius: 3mm; break-inside: avoid; }
+  .note { display: flex; gap: 7mm; margin-bottom: 5mm; padding: 5mm; border: .3mm solid #e7e4ec; border-radius: 3mm; break-inside: avoid; }
   .note.wide { flex-direction: column; gap: 4mm; }
   .note.wide .shot { align-self: center; }
   .shot { flex: none; }
   .body { flex: 1; min-width: 0; }
-  .img { position: relative; overflow: hidden; border: .25mm solid #d6c8a9; border-radius: 1.5mm; background: #f7f1e4; }
+  .img { position: relative; overflow: hidden; border: .25mm solid #d4d0dc; border-radius: 1.5mm; background: #f6f5f8; }
   .img img { position: absolute; left: 0; top: 0; display: block; }
   .cap { margin: 1.2mm 0 0; color: #6a6175; font-size: 8pt; }
   .num { display: flex; align-items: center; gap: 2mm; font-size: 12pt; font-weight: 700; }
   .num span { display: inline-grid; place-items: center; width: 6.5mm; height: 6.5mm; color: #fff; background: #e5484d; border-radius: 50%; font-size: 9.5pt; }
   .text { margin: 2.5mm 0 4.5mm; padding: 3mm 3.5mm; background: #fff7f7; border: .25mm solid #f3d4d5; border-left: 1.1mm solid #e5484d; border-radius: 2mm; font-size: 11pt; white-space: normal; overflow-wrap: anywhere; }
   tr.none td { color: #a59bb0; }
-  .meta { margin-top: 4mm; padding-top: 2.5mm; border-top: .2mm solid #e7e1d5; color: #6a6175; font-size: 8pt; overflow-wrap: anywhere; }
+  .meta { margin-top: 4mm; padding-top: 2.5mm; border-top: .2mm solid #e7e4ec; color: #6a6175; font-size: 8pt; overflow-wrap: anywhere; }
   /* The device drawing. Bar contents are sized in em: the screen's font-size
      is set per note so they scale with the drawing. */
   .device { width: fit-content; background: #0b0c0f; box-shadow: 0 0 0 .25mm #2e333d; }
