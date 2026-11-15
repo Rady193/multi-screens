@@ -2,7 +2,7 @@
 
 Multi Screens shows one web app side by side on several device screens, so you can review a page on a phone, a tablet and a laptop at the same time. What you do on one screen is repeated on the others.
 
-Version 1.7.1 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
+Version 1.8.0 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
 
 ## Contents
 
@@ -21,16 +21,13 @@ Version 1.7.1 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
 
 ## Install
 
-Download from the [Releases page](https://github.com/Rady193/multi-screens/releases/latest). Two files are offered; use whichever suits you.
+Download `Multi-Screens-Setup-1.8.0.exe` from the [Releases page](https://github.com/Rady193/multi-screens/releases/latest) and run it, or install it from the **SCAFFApps Suite**. It installs for everyone on the computer, in `C:\Program Files\SCAFFApps\Multi Screens` unless you choose another folder, so Windows asks for administrator permission once. It adds a desktop shortcut and a Start menu shortcut in the **SCAFFApps** folder, and can be removed from Windows Settings. A copy installed by an earlier version in `C:\Program Files\Multi Screens` moves to the SCAFFApps folder when it updates.
 
-| File | What it is |
-|---|---|
-| `Multi-Screens-Setup-1.7.1.exe` | Installer. Installs for everyone on the computer, in `C:\Program Files\Multi Screens` unless you choose another folder, so Windows asks for administrator permission once. Adds Start menu and desktop shortcuts, and can be removed from Windows Settings. |
-| `Multi-Screens-1.7.1-portable.exe` | Single file. Nothing is installed and no administrator permission is needed; copy it anywhere (including a USB stick) and double-click it. |
+Since 1.8.0 Multi Screens is installed, not portable. A portable copy from before cannot update itself to it: install it with the installer once, then delete the portable file.
 
 The release notes list each file's SHA-256 checksum, so you can check a download with `Get-FileHash <file>` in PowerShell.
 
-The app is not code-signed, so the first time you run either file Windows SmartScreen may show "Windows protected your PC". Choose **More info**, then **Run anyway**. To remove that warning for other people you would need to buy a code-signing certificate and sign the files.
+The app is not code-signed, so the first time you run the installer Windows SmartScreen may show "Windows protected your PC". Choose **More info**, then **Run anyway**. To remove that warning for other people you would need to buy a code-signing certificate and sign the files.
 
 No other software is needed. The browser engine is built in.
 
@@ -38,23 +35,25 @@ No other software is needed. The browser engine is built in.
 
 Everything the app produces goes into one folder that you choose:
 
-- **Installer:** a page titled "Output folder" asks where to save, after you pick the install location. It suggests `Documents\Multi Screens`.
-- **Portable file:** there is no installer, so the app asks once, the first time it starts.
+A page of the installer titled "Output folder" asks where to save, after you pick the install location. It suggests `Documents\Multi Screens`. (Installed from the SCAFFApps Suite, without the installer's pages, the app asks once, the first time it starts.)
 
 Inside that folder the app keeps three subfolders: `Screenshots`, `Videos` and `Reports`.
 
 To open the folder, press the **folder** button in the top bar. To change it, open **Settings** (the sliders icon) and choose **Change…**. Changing the folder does not move files already saved.
 
+### The first start
+
+The first SCAFFApps app to start on a Windows account asks for your **name** and **e-mail address**, once. Both are required; closing the window without them closes the app. The other SCAFFApps apps on that account (the SCAFFApps Suite, Smart Snap, Instant Share) use the same details and do not ask again. They are sent to SCAFFApps (`www.scaffapps.com`) with the app's name and version, the Windows version and a random number made for your Windows account, so SCAFFApps knows who uses its apps. Nothing else about you or the computer is sent, and nothing you review.
+
 ## Updates
 
 From version 1.7.0 Multi Screens can check for a newer version and install it. Earlier versions cannot, so install 1.7.0 by hand once.
 
-- **Checking.** A few seconds after it starts, and once a day while it stays open, the app asks GitHub for the latest release. When a newer version exists, a message says so once and the **Settings** button (sliders icon) shows a blue dot until you update.
+- **Checking.** A few seconds after it starts, and once a day while it stays open, the app asks GitHub for the latest release. When a newer version exists, a message says so once and the **Settings** button (sliders icon) shows a gold dot until you update. The SCAFFApps Suite shows the same and can install it.
 - **By hand.** Open **Settings** and choose **Check for updates**. The Updates part also shows the version you have.
 - **What is new.** Settings shows the new version's release notes. **Release page** opens the full notes on GitHub.
 - **Update now** downloads the new version and checks it against the SHA-256 checksums published with the release: the one GitHub works out for the file and the one in the release notes. A file that does not match is discarded and nothing is installed.
-  - **Installed copy:** Windows asks for administrator permission. Multi Screens then closes, the new version is installed in the same folder without the installer's pages, and the app opens again.
-  - **Portable file:** the new file (for example `Multi-Screens-1.8.0-portable.exe`) is saved beside the one you are running and opened in its place. Once the old copy has closed, the new version moves the old file to the Recycle Bin, so it can still be restored. A shortcut to the old file stops working; make a new one to the new file. If the folder cannot be written to, the new file is saved in your Downloads folder instead and the old file is left where it is.
+  Windows then asks for administrator permission. Multi Screens closes, the new version is installed without the installer's pages (in `C:\Program Files\SCAFFApps\Multi Screens`, or the folder you chose), and the app opens again.
 - Settings, history, saved logins, review notes and the output folder are kept.
 - Stop a recording, and save or cancel a note you are placing, before updating.
 - **Turning checks off.** Clear **Check for updates automatically** in Settings. The app then contacts GitHub only when you choose **Check for updates**. A check is an ordinary web request that names the app and its version; nothing else is sent.
@@ -95,7 +94,7 @@ Every percentage in the app means the same thing: **size compared with the real 
 - **Fit all** picks the largest size at which every screen fits in the window.
 - **Large** sizes each screen separately to fill the window, so the percentages differ in that view.
 - **Actual size** draws every screen life-size, at exactly 100%. It stays at 100% when the window moves to another display, where the screens are redrawn to that display's size.
-- **One screen on its own:** type a value into the percentage beside a screen's name. That screen keeps its own size while the others follow the slider; its percentage turns blue. Click the small × beside it to make it follow the slider again.
+- **One screen on its own:** type a value into the percentage beside a screen's name. That screen keeps its own size while the others follow the slider; its percentage is highlighted. Click the small × beside it to make it follow the slider again.
 
 Life-size drawing depends on knowing how big your display is, and this is automatic. Each monitor reports its own physical size in millimetres; the app reads that for every connected display and uses the one its window is on. Move the window to another monitor, or plug one in, and the scale follows. The sizes are remembered, so they are in place from the first moment on later starts.
 
@@ -129,13 +128,13 @@ Three switches under **Sync** in the second bar. All are on by default.
 | Navigation | Following a link or changing page. |
 | Clicks, typing & hover | Clicks, text typed into fields, ticked boxes, and mouse hover effects. |
 
-The screen you last used is the leader and is outlined in blue.
+The screen you last used is the leader and is outlined in gold (purple in the light appearance).
 
 ### Review notes and PDF report
 
 Write notes on what you see while you review, then turn them into a report.
 
-1. Under the screen you are looking at, press the **note** button (speech bubble with a plus). The screen gets a blue tint and a crosshair.
+1. Under the screen you are looking at, press the **note** button (speech bubble with a plus). The screen gets a gold tint and a crosshair.
 2. **Click** the spot you mean, or **drag** a rectangle over the area.
 3. Type your comment in the box that opens and choose **Save note** (or press Ctrl+Enter). The app takes a picture of that screen as it is at that moment and keeps it with the note.
 4. Carry on reviewing. Scroll, move to other pages and add as many notes as you like, on any screen.
@@ -236,7 +235,7 @@ Things to know:
 - **Review notes** lists all notes and creates a report for all screens.
 - **Clear site data** deletes cookies, sign-in sessions and cache for the previewed pages, after asking for confirmation. It does not delete saved logins or history.
 - **Output folder** (folder icon in the top bar) opens the folder where screenshots, videos and reports are saved.
-- **Settings** (sliders icon) holds the display size used for life-size drawing, the output folder, and updates. A blue dot on it means a newer version is available.
+- **Settings** (sliders icon) holds the display size used for life-size drawing, the output folder, and updates. A gold dot on it means a newer version is available.
 
 ## Keyboard shortcuts
 
@@ -259,8 +258,9 @@ Things to know:
 | Review notes and their screenshots | `%APPDATA%\Multi Screens\review` |
 | Saved logins (encrypted) | `%APPDATA%\Multi Screens\logins.json` |
 | Settings, history, last address, sign-in sessions for previewed sites | `%APPDATA%\Multi Screens` |
-| A downloaded update (installed copy) | `%TEMP%\Multi Screens update` |
-| A downloaded update (portable file) | Beside the portable file you ran, or in Downloads |
+| A downloaded update | `%TEMP%\Multi Screens update` |
+| The program | `C:\Program Files\SCAFFApps\Multi Screens` (or the folder you chose) |
+| Your registration (name and e-mail, shared by every SCAFFApps app) | `%APPDATA%\SCAFFApps\registration.json` |
 
 Deleting the `%APPDATA%\Multi Screens` folder resets the app completely, including saved logins, history and review notes. Reports already created in Documents are not affected.
 
@@ -288,7 +288,7 @@ npm install
 npm start
 ```
 
-To produce the Windows installer and portable file in the `release` folder:
+To produce the Windows installer in the `release` folder:
 
 ```bash
 npm run dist
@@ -307,12 +307,13 @@ Notes:
 |---|---|
 | `main.js` | Starts the window, applies device emulation, saves screenshots and videos, keeps the encrypted logins and review notes, and builds the PDF report. |
 | `host-preload.js` | The small, fixed set of functions the app window may call in `main.js`. |
+| `registration.js`, `registration-preload.js`, `app/registration.html` | The name and e-mail registration, the same files in every SCAFFApps Electron app. |
 | `monitors.ps1` | Asks Windows for each connected monitor's physical size. Run by `main.js`. |
 | `guest-preload.js` | Runs inside each previewed page; reports and replays scroll, clicks, typing and hover, and fills a saved login. |
 | `app/index.html`, `app/style.css`, `app/renderer.js` | The app's interface, including the device list at the top of `renderer.js`. |
 | `app/start.html` | The "Ready" page shown before an address is entered. |
 | `app/theme-early.js` | Applies the saved light or dark appearance before the window is first drawn. |
-| `build/` | Icon files and `make-icon.js`, which draws them from `icon.svg`; the packaging hook; and `installer.nsh`, the installer page that asks for the output folder. |
+| `build/` | Icon files and `make-icon.js`, which draws them from `icon.svg`; the packaging hook; and `installer.nsh`, the installer page that asks for the output folder and moves an install from the old folder. |
 | `release/` | Built installers. |
 
 To add or change a device, edit the `DEVICES` list at the top of `app/renderer.js`. Each device's `phys` value is the width of its real screen in millimetres divided by its width in CSS pixels; it is what makes life-size drawing work.
