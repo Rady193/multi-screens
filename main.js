@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const { execFile, spawn } = require('child_process');
 const path = require('path');
 const registration = require('./registration');
+const releases = require('./releases');
 const fs = require('fs');
 const { pathToFileURL } = require('url');
 
@@ -978,8 +979,9 @@ ipcMain.handle('reveal', (_e, file) => shell.showItemInFolder(file));
 // for it, and run it.
 const UPDATE_REPO = 'Rady193/multi-screens';
 const UPDATE_PAGE = `https://github.com/${UPDATE_REPO}/releases/latest`;
-// A stand-in for GitHub can be named for tests.
-const UPDATE_API = process.env.MULTI_SCREENS_UPDATE_API || `https://api.github.com/repos/${UPDATE_REPO}/releases/latest`;
+// The newest release is asked of the SCAFFApps website first (releases.js), GitHub's API last. A stand-in for
+// GitHub's releases/latest can be named for tests; it is then asked alone.
+const UPDATE_TEST = process.env.MULTI_SCREENS_UPDATE_API || null;
 const UPDATE_EVERY = 24 * 60 * 60 * 1000;
 const UPDATE_AGENT = `MultiScreens/${app.getVersion()}`;
 const UPDATE_FILES = {
@@ -1087,14 +1089,7 @@ async function checkForUpdates() {
   update.error = null;
   sendUpdate();
   try {
-    const res = await net.fetch(UPDATE_API, {
-      headers: { Accept: 'application/vnd.github+json', 'User-Agent': UPDATE_AGENT },
-      cache: 'no-store',
-    });
-    if (res.status === 403 || res.status === 429) throw new Error('GitHub is limiting how often it can be asked. Try again in an hour.');
-    if (res.status === 404) throw new Error('No release has been published yet.');
-    if (!res.ok) throw new Error(`GitHub answered with error ${res.status}. Try again later.`);
-    const release = await res.json();
+    const release = await releases.latest(UPDATE_REPO, { agent: UPDATE_AGENT, test: UPDATE_TEST });
     const version = String(release.tag_name || '').replace(/^v/i, '');
     if (!/^\d+(\.\d+)*$/.test(version)) throw new Error('The latest release has no version number.');
     const pattern = UPDATE_FILES[installKind()];

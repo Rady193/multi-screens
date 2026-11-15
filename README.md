@@ -49,14 +49,14 @@ The first SCAFFApps app to start on a Windows account asks for your **name** and
 
 From version 1.7.0 Multi Screens can check for a newer version and install it. Earlier versions cannot, so install 1.7.0 by hand once.
 
-- **Checking.** A few seconds after it starts, and once a day while it stays open, the app asks GitHub for the latest release. When a newer version exists, a message says so once and the **Settings** button (sliders icon) shows a gold dot until you update. The SCAFFApps Suite shows the same and can install it.
+- **Checking.** A few seconds after it starts, and once a day while it stays open, the app asks the SCAFFApps website for the latest release (GitHub if the website does not answer). When a newer version exists, a message says so once and the **Settings** button (sliders icon) shows a gold dot until you update. The SCAFFApps Suite shows the same and can install it.
 - **By hand.** Open **Settings** and choose **Check for updates**. The Updates part also shows the version you have.
 - **What is new.** Settings shows the new version's release notes. **Release page** opens the full notes on GitHub.
 - **Update now** downloads the new version and checks it against the SHA-256 checksums published with the release: the one GitHub works out for the file and the one in the release notes. A file that does not match is discarded and nothing is installed.
   Windows then asks for administrator permission. Multi Screens closes, the new version is installed without the installer's pages (in `C:\Program Files\SCAFFApps\Multi Screens`, or the folder you chose), and the app opens again.
 - Settings, history, saved logins, review notes and the output folder are kept.
 - Stop a recording, and save or cancel a note you are placing, before updating.
-- **Turning checks off.** Clear **Check for updates automatically** in Settings. The app then contacts GitHub only when you choose **Check for updates**. A check is an ordinary web request that names the app and its version; nothing else is sent.
+- **Turning checks off.** Clear **Check for updates automatically** in Settings. The app then asks only when you choose **Check for updates**. A check is an ordinary web request that names the app and its version; nothing else is sent.
 
 ## Quick start
 

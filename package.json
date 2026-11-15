@@ -26,6 +26,7 @@
     "files": [
       "main.js",
       "registration.js",
+      "releases.js",
       "registration-preload.js",
       "host-preload.js",
       "guest-preload.js",
