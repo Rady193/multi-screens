@@ -79,3 +79,17 @@ FunctionEnd
 !macroend
 
 !endif
+
+; Every SCAFFApps app lives in "Program Files\SCAFFApps": menuCategory in package.json gives a new install that folder
+; (and the SCAFFApps folder in the Start menu). A copy installed in the old default place, "Program Files\<app>",
+; moves there at its next update, silent updates from Settings included: the install goes to the new folder, and the
+; old version, found through the registry, is uninstalled from where it was (uninstallOldVersion). A folder the user
+; chose is left alone.
+!ifndef BUILD_UNINSTALLER
+!macro customInit
+  ${If} $INSTDIR == "$PROGRAMFILES64\${APP_FILENAME}"
+  ${OrIf} $INSTDIR == "$PROGRAMFILES\${APP_FILENAME}"
+    StrCpy $INSTDIR "$PROGRAMFILES64\SCAFFApps\${APP_FILENAME}"
+  ${EndIf}
+!macroend
+!endif

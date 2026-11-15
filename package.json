@@ -40,8 +40,7 @@
     "afterPack": "build/after-pack.js",
     "win": {
       "target": [
-        "nsis",
-        "portable"
+        "nsis"
       ],
       "icon": "build/icon.ico",
       "signAndEditExecutable": false
@@ -54,10 +53,8 @@
       "createStartMenuShortcut": true,
       "shortcutName": "Multi Screens",
       "artifactName": "Multi-Screens-Setup-${version}.${ext}",
-      "include": "build/installer.nsh"
-    },
-    "portable": {
-      "artifactName": "Multi-Screens-${version}-portable.${ext}"
+      "include": "build/installer.nsh",
+      "menuCategory": "SCAFFApps"
     },
     "mac": {
       "target": "dmg",
