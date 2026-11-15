@@ -1009,7 +1009,8 @@ function buildSettings(pop) {
 
   const updates = h('div', { className: 'pop-form update-box' });
   renderUpdates(updates);
-  pop.append(updates);
+  pop.append(updates,
+    h('p', { className: 'credit' }, 'Published by ', h('b', { textContent: 'SCAFFApps' }), ' · www.scaffapps.com'));
   // Opened while a new version is waiting: show that part, which comes last
   // (once the folder's path, which arrives a moment later, is in place).
   if (updateWaiting()) folderShown.then(() => requestAnimationFrame(() => { pop.scrollTop = pop.scrollHeight; }));

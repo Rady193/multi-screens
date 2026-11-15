@@ -1,5 +1,31 @@
 # Release notes
 
+## 1.8.1 — 16 November 2026
+
+A shorter sign-up window, and "Published by SCAFFApps" at the end of Settings.
+
+### Downloads
+
+| File | Size | SHA-256 |
+|---|---|---|
+| `Multi-Screens-Setup-1.8.1.exe` | 78.0 MB | `D3867F58A68DE181DD9564BF7D085DF578E3E19E405D376974C78EFBE5794AC4` |
+
+For 64-bit Windows 10 and 11. Not code-signed, so Windows SmartScreen may ask for confirmation on first run.
+
+### Changed
+
+- **The sign-up window** (your name and e-mail, asked once) ends with "Published by **SCAFFApps** · www.scaffapps.com", without the paragraph above it.
+- **Settings** ends with the same line.
+
+### Updating from 1.8.0
+
+- Settings > Updates > **Update now**, or **Update** in the SCAFFApps Suite. Windows asks for permission; Multi Screens closes, is updated and opens again.
+
+### Tested
+
+- The SCAFFApps Suite 1.0.0 updated Multi Screens 1.8.0 to 1.8.1 with its own button, against a stand-in for GitHub offering this installer: downloaded, checked against both checksums, Windows' permission, installed in 10 seconds; Windows lists 1.8.1. Microsoft Defender finds nothing in the installer.
+- Settings in the new build: the line at the end, SCAFFApps in bold.
+
 ## 1.8.0 — 16 November 2026
 
 Installed, not portable, in the SCAFFApps folder; the SCAFFApps colours; your name and e-mail asked once.
