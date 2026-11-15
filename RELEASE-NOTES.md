@@ -1,5 +1,35 @@
 # Release notes
 
+## 1.8.2 — 16 November 2026
+
+The handbook in the SCAFFApps style, scrollbars in the SCAFFApps colours, and panels that fit the window.
+
+### Downloads
+
+| File | Size | SHA-256 |
+|---|---|---|
+| `Multi-Screens-Setup-1.8.2.exe` | 78.0 MB | `AD1FC40AB3225AD666F21DEA54273F4542327934003CAA45CEF09031A077A6B7` |
+| `Multi-Screens-Handbook-1.8.2.pdf` | 4.3 MB | `0FA3603C1558A23CEABE3952F521A2F2A140C97386770002CE6BE551FBF76C99` |
+
+For 64-bit Windows 10 and 11. Not code-signed, so Windows SmartScreen may ask for confirmation on first run.
+
+### Changed
+
+- **The handbook**, `Multi-Screens-Handbook-1.8.2.pdf`: 15 pages with pictures in the SCAFFApps brochure style, from installing to troubleshooting. The SCAFFApps Suite opens it from Handbooks.
+- **"Published by SCAFFApps - www.scaffapps.com"** at the end of Settings and of the sign-up window.
+- **Scrollbars in the SCAFFApps style**: a slim purple bar on no track, wider under the pointer; never the grey Windows bar with its arrows.
+- **No scrolling where it can be helped**: Settings, history and saved logins use the window's height, so they scroll only on a short window.
+
+### Updating from 1.8.1
+
+- Settings > Updates > **Update now**, or **Update** in the SCAFFApps Suite.
+
+### Tested
+
+- Updated from 1.8.1 by the installed SCAFFApps Suite 1.0.1, against a stand-in for GitHub offering this installer: downloaded, checked against both published checksums, Windows' permission, installed in 9 seconds; Windows lists 1.8.2.
+- Microsoft Defender finds nothing in the installer.
+- The handbook's pictures were taken from this version, in a test profile, on a sample site.
+
 ## 1.8.1 — 16 November 2026
 
 A shorter sign-up window, and "Published by SCAFFApps" at the end of Settings.
