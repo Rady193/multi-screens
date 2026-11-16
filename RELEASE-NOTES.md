@@ -1,5 +1,38 @@
 # Release notes
 
+## 1.9.0 — 16 November 2026
+
+Copy a review report as a picture, and the tools beside the device chips.
+
+### Downloads
+
+| File | Size | SHA-256 |
+|---|---|---|
+| `Multi-Screens-Setup-1.9.0.exe` | 78.0 MB | `3760F183E96A78C419F38E741542AE8DFF9E14B5AD0C078E3B3156A108595958` |
+| `Multi-Screens-Handbook-1.9.0.pdf` | 4.3 MB | `CAB1F4601B296F6B1368050D99A953CBD6D8C6DB924AD84A15D4310BCC1A0D77` |
+
+For 64-bit Windows 10 and 11. Not code-signed, so Windows SmartScreen may ask for confirmation on first run.
+
+### Added
+
+- **Copy as picture**, in the review screen: the whole report on the clipboard as one tall picture, to paste into a chat, an email or a document. It is the PDF's report on one page, twice as sharp as the screen. Nothing is saved and the notes stay, so the PDF can still be made afterwards.
+
+### Changed
+
+- **The tools beside the device chips**: Note anywhere, Review notes, Find overflow, Screenshot all and Clear site data move from the second bar to the devices' line.
+- **The handbook**, `Multi-Screens-Handbook-1.9.0.pdf`, with its pictures retaken from this version.
+
+### Updating from 1.8.2
+
+- Settings > Updates > **Update now**, or **Update** in the SCAFFApps Suite.
+
+### Tested
+
+- Copy as picture from the source code, on a sample site with notes on two phones: a 1588 × 3152 picture on the clipboard in under a second, both notes still in the review screen. Create PDF report still saves the PDF and clears its notes.
+- The tools beside the device chips in the dark and light appearances, and as icons only on a narrower window.
+- 1.8.2 installed, then this installer over it as Update now runs it (silent, with Windows' permission): installed in 8 seconds, Windows lists 1.9.0, and it opens.
+- Microsoft Defender finds nothing in the installer.
+
 ## 1.8.2 — 16 November 2026
 
 The handbook in the SCAFFApps style, scrollbars in the SCAFFApps colours, and panels that fit the window.
