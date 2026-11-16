@@ -1317,7 +1317,7 @@ function setupNoteLayer(pane) {
 function openNoteEditor(pane, number, x, y) {
   const editor = $('note-editor');
   const { device } = pane;
-  const text = h('textarea', { rows: 4, placeholder: 'Describe what you see here…' });
+  const text = h('textarea', { rows: 4, placeholder: 'Describe what you see here…', title: 'Enter saves · Shift+Enter starts a new line' });
   const save = async () => {
     const value = text.value.trim();
     if (!value) { text.focus(); return; }
@@ -1350,14 +1350,15 @@ function openNoteEditor(pane, number, x, y) {
     await refreshNotes();
     toast(`Note ${number} saved for ${device.name}.`);
   };
+  // Enter saves; Shift+Enter starts a new line (Ctrl+Enter still saves too).
   text.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); save(); }
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); save(); }
   });
   editor.replaceChildren(
     h('strong', { textContent: `Note ${number} · ${device.name}` }),
     text,
     h('div', { className: 'note-editor-row' },
-      h('span', { className: 'pop-note', textContent: 'Ctrl+Enter saves' }),
+      h('span', { className: 'pop-note', textContent: 'Enter saves' }),
       h('button', { className: 'small', textContent: 'Cancel', onclick: cancelNoting }),
       h('button', { className: 'small primary', textContent: 'Save note', onclick: save })));
   editor.hidden = false;

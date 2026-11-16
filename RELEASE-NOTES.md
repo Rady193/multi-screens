@@ -1,5 +1,33 @@
 # Release notes
 
+## 1.10.1 — 16 November 2026
+
+Enter saves a note.
+
+### Downloads
+
+| File | Size | SHA-256 |
+|---|---|---|
+| `Multi-Screens-Setup-1.10.1.exe` | 78.0 MB | `113D34038B1921CB1E82B30BB5461A5490CAAD6CB99B1B034D95AF95EC4A81FD` |
+| `Multi-Screens-Handbook-1.10.1.pdf` | 4.1 MB | `81424EB83272BAB4D42682E98857C6318A062BB950C22F90893C0E1DB9D30AA0` |
+
+For 64-bit Windows 10 and 11. Not code-signed, so Windows SmartScreen may ask for confirmation on first run.
+
+### Changed
+
+- **Enter saves the note** being written; **Shift+Enter** starts a new line (Ctrl+Enter still saves too). The same in Smart Snap's comment box.
+- **The handbook**, `Multi-Screens-Handbook-1.10.1.pdf`, with Enter on the Notes and Keys pages.
+
+### Updating from 1.10.0
+
+- Settings > Updates > **Update now**, or **Update** in the SCAFFApps Suite.
+
+### Tested
+
+- The packaged app, in a test profile with the handbook's sample site: a note typed over two lines with Shift+Enter stays open, and Enter saves it with both lines.
+- 1.10.0 installed offers this version (the handbook's update picture).
+- Microsoft Defender finds nothing in the installer.
+
 ## 1.10.0 — 16 November 2026
 
 Shortcuts for the tools, Print Screen for Note anywhere, and window buttons that dim with the review screen.

@@ -2,7 +2,7 @@
 
 Multi Screens shows one web app side by side on several device screens, so you can review a page on a phone, a tablet and a laptop at the same time. What you do on one screen is repeated on the others.
 
-Version 1.8.2 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
+Version 1.10.1 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
 
 ## Contents
 
@@ -21,7 +21,7 @@ Version 1.8.2 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
 
 ## Install
 
-Download `Multi-Screens-Setup-1.8.2.exe` from the [Releases page](https://github.com/Rady193/multi-screens/releases/latest) and run it, or install it from the **SCAFFApps Suite**. It installs for everyone on the computer, in `C:\Program Files\SCAFFApps\Multi Screens` unless you choose another folder, so Windows asks for administrator permission once. It adds a desktop shortcut and a Start menu shortcut in the **SCAFFApps** folder, and can be removed from Windows Settings. A copy installed by an earlier version in `C:\Program Files\Multi Screens` moves to the SCAFFApps folder when it updates.
+Download `Multi-Screens-Setup-1.10.1.exe` from the [Releases page](https://github.com/Rady193/multi-screens/releases/latest) and run it, or install it from the **SCAFFApps Suite**. It installs for everyone on the computer, in `C:\Program Files\SCAFFApps\Multi Screens` unless you choose another folder, so Windows asks for administrator permission once. It adds a desktop shortcut and a Start menu shortcut in the **SCAFFApps** folder, and can be removed from Windows Settings. A copy installed by an earlier version in `C:\Program Files\Multi Screens` moves to the SCAFFApps folder when it updates.
 
 Since 1.8.0 Multi Screens is installed, not portable. A portable copy from before cannot update itself to it: install it with the installer once, then delete the portable file.
 
@@ -136,7 +136,7 @@ Write notes on what you see while you review, then turn them into a report.
 
 1. Under the screen you are looking at, press the **note** button (speech bubble with a plus). The screen gets a gold tint and a crosshair.
 2. **Click** the spot you mean, or **drag** a rectangle over the area.
-3. Type your comment in the box that opens and choose **Save note** (or press Ctrl+Enter). The app takes a picture of that screen as it is at that moment and keeps it with the note.
+3. Type your comment in the box that opens and choose **Save note** (or press Enter; Shift+Enter starts a new line). The app takes a picture of that screen as it is at that moment and keeps it with the note.
 4. Carry on reviewing. Scroll, move to other pages and add as many notes as you like, on any screen.
 5. When you are done, press the **report** button (the page icon) under a screen. A red dot on the button means that screen has notes ready.
 6. A **review screen** opens before anything is created. It lists each note with its picture and marker. Here you can:
