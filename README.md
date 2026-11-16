@@ -143,18 +143,19 @@ Write notes on what you see while you review, then turn them into a report.
    - **reword a comment** by typing in it (it saves when you click elsewhere),
    - **discard a note** you no longer want,
    - **enlarge a picture** by clicking it. The picture opens large with its marker. Zoom with the − and + buttons, by clicking a point on the picture, or with Ctrl + mouse wheel, up to six times. **Fit** shows the whole picture again and Esc closes it.
+   - **Copy as picture** puts the whole report on the clipboard as one tall picture, to paste into a chat, an email or a document. Nothing is saved and the notes stay in the app, so you can still create the PDF afterwards.
    - then choose **Create PDF report**, or **Close** to carry on reviewing.
 
-The PDF opens with the site, date and counts, a summary table of devices, then one entry per note. Pages are numbered.
+The PDF opens with the site, date and counts, a summary table of devices, then one entry per note. Pages are numbered. The picture shows the same report as one page, without page numbers.
 
 - the note's number and your comment,
 - a drawing of the device as it appears in the app (body, status bar with its camera cut-out, navigation bar) showing the page, with a numbered marker where you clicked or dragged,
 - a close-up of the marked spot or area,
 - the page title, address and time.
 
-**Note anywhere** in the second bar works the same way on the whole app window instead of one device. Use it to mark something that spans several screens, for example to compare the same header on two phones side by side. The picture kept with the note is of the app window. It cannot mark other programs or the rest of your desktop.
+**Note anywhere**, next to the device chips, works the same way on the whole app window instead of one device. Use it to mark something that spans several screens, for example to compare the same header on two phones side by side. The picture kept with the note is of the app window. It cannot mark other programs or the rest of your desktop.
 
-**Review notes** in the second bar opens the same review screen for every note across all screens, and creates one report covering every device. It also shows a red dot when there are notes waiting. That report lists every device that was on show, including those with no notes, so the "Devices reviewed" figure is the number of devices you looked at.
+**Review notes**, next to the device chips, opens the same review screen for every note across all screens, and creates one report covering every device. It also shows a red dot when there are notes waiting. That report lists every device that was on show, including those with no notes, so the "Devices reviewed" figure is the number of devices you looked at.
 
 Things to know:
 
@@ -231,9 +232,9 @@ Things to know:
 
 ### Other
 
-- **Screenshot all** saves an image of every visible screen.
-- **Review notes** lists all notes and creates a report for all screens.
-- **Clear site data** deletes cookies, sign-in sessions and cache for the previewed pages, after asking for confirmation. It does not delete saved logins or history.
+- **Screenshot all** (next to the device chips) saves an image of every visible screen.
+- **Review notes** (next to the device chips) lists all notes and creates a report for all screens.
+- **Clear site data** (next to the device chips) deletes cookies, sign-in sessions and cache for the previewed pages, after asking for confirmation. It does not delete saved logins or history.
 - **Output folder** (folder icon in the top bar) opens the folder where screenshots, videos and reports are saved.
 - **Settings** (sliders icon) holds the display size used for life-size drawing, the output folder, and updates. A gold dot on it means a newer version is available.
 

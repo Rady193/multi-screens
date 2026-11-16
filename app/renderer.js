@@ -68,6 +68,7 @@ const ICONS = {
   report: '<path d="M7 3.5h7l4 4V19a1.5 1.5 0 0 1-1.5 1.5h-9.5A1.5 1.5 0 0 1 5.5 19V5A1.5 1.5 0 0 1 7 3.5z"/><path d="M13.5 3.5V8H18M8.5 12.5h7M8.5 16h5"/>',
   folder: '<path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.3l2 2H19A1.5 1.5 0 0 1 20.5 9v8.5A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5z"/>',
   expand: '<path d="M14 4.5h5.5V10M19.5 4.5 13 11M10 19.5H4.5V14M4.5 19.5 11 13"/>',
+  copy: '<rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6A1.5 1.5 0 0 0 14 4.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5"/>',
   trash: '<path d="M4.5 7h15"/><path d="M9.5 7V5h5v2"/><path d="M6.5 7l.8 11.500A1.5 1.5 0 0 0 8.8 20h6.400a1.5 1.5 0 0 0 1.5-1.500L17.5 7"/>',
 };
 const icon = (name) =>
@@ -1365,6 +1366,10 @@ function openNoteEditor(pane, number, x, y) {
   text.focus();
 }
 
+// The screens on show are listed in the report, including those with no notes.
+const reviewedScreens = () =>
+  visiblePanes().map((p) => ({ id: p.device.id, name: p.device.name, size: `${p.device.w} × ${p.device.h}`, dpr: p.device.dpr }));
+
 async function makeReport(deviceId) {
   const count = notes.filter((x) => !deviceId || x.deviceId === deviceId).length;
   if (!count) {
@@ -1372,9 +1377,7 @@ async function makeReport(deviceId) {
     return;
   }
   toast('Preparing the report…');
-  // The screens on show are listed in the report, including those with no notes.
-  const reviewed = visiblePanes().map((p) => ({ id: p.device.id, name: p.device.name, size: `${p.device.w} × ${p.device.h}`, dpr: p.device.dpr }));
-  const result = await api.notes.report(deviceId || null, reviewed);
+  const result = await api.notes.report(deviceId || null, reviewedScreens());
   if (result && result.file) {
     await refreshNotes();
     const cleared = result.cleared === 1 ? '1 note' : `${result.cleared} notes`;
@@ -1519,6 +1522,37 @@ async function openReview(deviceId) {
         text,
         h('div', { className: 'pop-note review-page', textContent: note.title ? `${note.title} — ${note.url}` : note.url }))));
   }
+  // Messages appear in the footer: the review screen covers the usual toast.
+  const footText = 'Creating the report saves a PDF and clears these notes from the app. Copying it as a picture keeps them.';
+  const foot = h('span', { className: 'pop-note', textContent: footText });
+  const copyLabel = h('span', { textContent: 'Copy as picture' });
+  const copyBtn = h('button', {
+    className: 'copy-picture',
+    title: 'Copy the whole report to the clipboard as one picture, to paste into a chat, an email or a document. The notes stay in the app.',
+    onclick: async () => {
+      // Let a comment still being typed save first.
+      if (document.activeElement) document.activeElement.blur();
+      await sleep(200);
+      copyBtn.disabled = true;
+      copyLabel.textContent = 'Copying…';
+      const result = await api.notes.copyPicture(deviceId || null, reviewedScreens());
+      copyBtn.disabled = false;
+      const ok = result && !result.error;
+      copyLabel.textContent = ok ? 'Copied' : 'Copy as picture';
+      foot.textContent = ok
+        ? 'The report is on the clipboard as a picture: paste it into a chat, an email or a document. The notes are still here.'
+        : (result && result.error) || 'The report could not be copied as a picture.';
+      foot.classList.toggle('done', ok);
+      clearTimeout(copyBtn.timer);
+      copyBtn.timer = setTimeout(() => {
+        copyLabel.textContent = 'Copy as picture';
+        foot.textContent = footText;
+        foot.classList.remove('done');
+      }, 6000);
+    },
+  });
+  copyBtn.innerHTML = icon('copy');
+  copyBtn.append(copyLabel);
   modal.replaceChildren(h('div', { className: 'review-card' },
     h('div', { className: 'review-top' },
       h('div', {},
@@ -1527,8 +1561,9 @@ async function openReview(deviceId) {
       h('button', { className: 'small icon-only', innerHTML: icon('close'), title: 'Close (Esc)', onclick: closeReview })),
     items,
     h('div', { className: 'review-foot' },
-      h('span', { className: 'pop-note', textContent: 'Creating the report saves a PDF and clears these notes from the app.' }),
+      foot,
       h('button', { textContent: 'Close', onclick: closeReview }),
+      copyBtn,
       h('button', {
         className: 'primary', textContent: 'Create PDF report',
         onclick: async () => {

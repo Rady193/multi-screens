@@ -34,6 +34,7 @@ contextBridge.exposeInMainWorld('multiScreens', {
     update: (id, text) => ipcRenderer.invoke('notes-update', id, text),
     image: (id, full) => ipcRenderer.invoke('notes-image', id, full),
     report: (deviceId, reviewed) => ipcRenderer.invoke('notes-report', deviceId, reviewed),
+    copyPicture: (deviceId, reviewed) => ipcRenderer.invoke('notes-copy-picture', deviceId, reviewed),
     open: (file) => ipcRenderer.invoke('notes-open', file),
   },
   updates: {

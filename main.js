@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, webContents, shell, session, safeStorage, nativeImage, dialog, screen, net } = require('electron');
+const { app, BrowserWindow, ipcMain, webContents, shell, session, safeStorage, nativeImage, dialog, screen, net, clipboard } = require('electron');
 const crypto = require('crypto');
 const { execFile, spawn } = require('child_process');
 const path = require('path');
@@ -692,7 +692,9 @@ function noteHtml(n, number) {
 </section>`;
 }
 
-function reportHtml(list, deviceId, reviewed) {
+// `picture`: drawn for one tall picture instead of printed pages. The page then
+// keeps the A4 width and its margins itself, on white, without a scrollbar.
+function reportHtml(list, deviceId, reviewed, picture) {
   const groups = new Map();
   for (const n of list) {
     if (!groups.has(n.deviceId)) groups.set(n.deviceId, []);
@@ -784,6 +786,7 @@ function reportHtml(list, deviceId, reviewed) {
   .mark.point::before { content: ""; position: absolute; left: -5mm; top: -5mm; width: 10mm; height: 10mm; border: .7mm solid #e5484d; border-radius: 50%; background: rgba(229, 72, 77, .12); }
   .mark span { display: inline-grid; place-items: center; min-width: 5mm; height: 5mm; padding: 0 1mm; color: #fff; background: #e5484d; border-radius: 2.5mm; font-size: 8pt; font-weight: 700; line-height: 1; }
   .mark.point span { position: absolute; left: 3mm; top: -8mm; }
+  ${picture ? 'html { background: #fff; scrollbar-width: none; } body { padding: 12mm 14mm 9mm; } .note:last-child { margin-bottom: 0; }' : ''}
 </style></head><body>
 <header>
   <div class="brand"><img src="${pathToFileURL(path.join(__dirname, 'app', 'icon.png')).href}" alt="">Multi Screens</div>
@@ -800,24 +803,43 @@ ${sections}
 </body></html>`;
 }
 
-ipcMain.handle('notes-report', async (_e, deviceId, reviewed) => {
-  const list = readNotes().filter((n) => (!deviceId || n.deviceId === deviceId) && UUID.test(n.id) && fs.existsSync(noteImage(n.id)));
-  if (!list.length) return { error: 'There are no notes to report.' };
-  const htmlFile = path.join(reviewDir(), 'report.html');
+// The notes that go into a report: one screen's (`deviceId`) or all of them.
+const reportNotes = (deviceId) =>
+  readNotes().filter((n) => (!deviceId || n.deviceId === deviceId) && UUID.test(n.id) && fs.existsSync(noteImage(n.id)));
+
+// Draws the report in a window of its own that is never shown, hands its page
+// to `use`, and closes it. A picture needs the window drawn off screen: Chromium
+// does not paint a hidden window, so there would be nothing to capture.
+async function withReportPage(list, deviceId, reviewed, picture, use) {
+  const htmlFile = path.join(reviewDir(), picture ? 'report-picture.html' : 'report.html');
   let win;
   try {
-    fs.writeFileSync(htmlFile, reportHtml(list, deviceId, reviewed));
-    win = new BrowserWindow({ show: false, width: 900, height: 1200, webPreferences: { javascript: false } });
+    fs.writeFileSync(htmlFile, reportHtml(list, deviceId, reviewed, picture));
+    win = new BrowserWindow({
+      show: false, width: 900, height: 1200, useContentSize: true,
+      webPreferences: { javascript: false, offscreen: !!picture },
+    });
     await win.loadFile(htmlFile);
-    // Margins are in inches; the footer carries the page number.
-    const pdf = await win.webContents.printToPDF({
+    return await use(win.webContents);
+  } finally {
+    if (win && !win.isDestroyed()) win.destroy();
+    fs.rmSync(htmlFile, { force: true });
+  }
+}
+
+ipcMain.handle('notes-report', async (_e, deviceId, reviewed) => {
+  const list = reportNotes(deviceId);
+  if (!list.length) return { error: 'There are no notes to report.' };
+  try {
+    const pdf = await withReportPage(list, deviceId, reviewed, false, (wc) => wc.printToPDF({
+      // Margins are in inches; the footer carries the page number.
       pageSize: 'A4',
       printBackground: true,
       margins: { top: 0.55, bottom: 0.75, left: 0.55, right: 0.55 },
       displayHeaderFooter: true,
       headerTemplate: '<span></span>',
       footerTemplate: '<div style="width:100%;padding:0 14mm;display:flex;justify-content:space-between;font:7.5pt Segoe UI,sans-serif;color:#8b93a5"><span>Multi Screens review report</span><span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>',
-    });
+    }));
     const dir = reportsDir();
     fs.mkdirSync(dir, { recursive: true });
     const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
@@ -832,9 +854,37 @@ ipcMain.handle('notes-report', async (_e, deviceId, reviewed) => {
     return { file, cleared: reported.size };
   } catch (err) {
     return { error: 'The report could not be created.' };
-  } finally {
-    if (win && !win.isDestroyed()) win.destroy();
-    fs.rmSync(htmlFile, { force: true });
+  }
+});
+
+// The same report as one tall picture on the clipboard, to paste into a chat,
+// an email or a document. Nothing is saved and the notes stay in the app.
+// The page is drawn at the A4 width, twice as sharp as on screen; a report too
+// long for that is drawn smaller, so the picture stays within PICTURE_MAX_H.
+const PICTURE_W = 794; // A4 at 96 dpi, in CSS pixels
+const PICTURE_MAX_H = 16000; // in pixels; Chromium cannot capture much taller
+ipcMain.handle('notes-copy-picture', async (_e, deviceId, reviewed) => {
+  const list = reportNotes(deviceId);
+  if (!list.length) return { error: 'There are no notes to report.' };
+  try {
+    const image = await withReportPage(list, deviceId, reviewed, true, async (wc) => {
+      wc.debugger.attach('1.3');
+      const send = (method, params) => wc.debugger.sendCommand(method, params);
+      const metrics = (height, deviceScaleFactor) =>
+        send('Emulation.setDeviceMetricsOverride', { width: PICTURE_W, height, deviceScaleFactor, mobile: false });
+      await metrics(1000, 1);
+      const { cssContentSize } = await send('Page.getLayoutMetrics');
+      const height = Math.ceil(cssContentSize.height);
+      await metrics(height, Math.min(2, PICTURE_MAX_H / height));
+      // Closing the window (on a timeout) ends a capture that never finishes.
+      const { data } = await withTimeout(send('Page.captureScreenshot', { format: 'png' }), 20000);
+      return nativeImage.createFromBuffer(Buffer.from(data, 'base64'));
+    });
+    if (image.isEmpty()) throw new Error('empty picture');
+    clipboard.writeImage(image);
+    return { ...image.getSize(), notes: list.length };
+  } catch (err) {
+    return { error: 'The report could not be copied as a picture.' };
   }
 });
 
