@@ -18,6 +18,8 @@ contextBridge.exposeInMainWorld('multiScreens', {
   },
   clearData: () => ipcRenderer.invoke('clear-data'),
   setTheme: (theme) => ipcRenderer.invoke('set-theme', theme),
+  titleBarTint: (colours) => ipcRenderer.invoke('title-bar-tint', colours),
+  onShortcut: (callback) => ipcRenderer.on('shortcut', (_event, tool) => callback(tool)),
   mouseMove: (id, x, y, leave) => ipcRenderer.invoke('mouse-move', id, x, y, leave),
   reveal: (file) => ipcRenderer.invoke('reveal', file),
   output: {

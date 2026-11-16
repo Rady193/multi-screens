@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, webContents, shell, session, safeStorage, nativeImage, dialog, screen, net, clipboard } = require('electron');
+const { app, BrowserWindow, ipcMain, webContents, shell, session, safeStorage, nativeImage, dialog, screen, net, clipboard, globalShortcut } = require('electron');
 const crypto = require('crypto');
 const { execFile, spawn } = require('child_process');
 const path = require('path');
@@ -64,7 +64,45 @@ ipcMain.handle('set-theme', (event, theme) => {
   }
   if (!win) return;
   win.setBackgroundColor(colors.color);
-  if (CUSTOM_TITLE_BAR) win.setTitleBarOverlay({ ...colors, height: TITLE_BAR_HEIGHT });
+  paintTitleBar(win);
+});
+
+// Windows draws the window buttons (minimise, maximise, close) itself, on top of
+// the page, so an overlay that dims or tints the whole window (the review screen,
+// an enlarged picture, Note anywhere) cannot cover them. The interface names the
+// overlays' colours, bottom first, and the buttons are painted as if under them.
+const titleBarTints = new WeakMap();
+
+function parseRgba(text) {
+  const m = /^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*(?:,\s*([\d.]+)\s*)?\)$/.exec(String(text));
+  if (!m) return null;
+  const [r, g, b] = [m[1], m[2], m[3]].map((v) => Math.min(255, Number(v) || 0));
+  const a = m[4] === undefined ? 1 : Math.min(1, Number(m[4]) || 0);
+  return a > 0 ? [r, g, b, a] : null;
+}
+
+function paintTitleBar(win) {
+  if (!CUSTOM_TITLE_BAR || !win || win.isDestroyed()) return;
+  const base = TITLE_BAR[loadSettings().appTheme] || TITLE_BAR.dark;
+  const tints = titleBarTints.get(win) || [];
+  if (!tints.length) {
+    win.setTitleBarOverlay({ ...base, height: TITLE_BAR_HEIGHT });
+    return;
+  }
+  let rgb = [1, 3, 5].map((i) => parseInt(base.color.slice(i, i + 2), 16));
+  for (const [r, g, b, a] of tints) rgb = rgb.map((v, i) => v * (1 - a) + [r, g, b][i] * a);
+  const color = '#' + rgb.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('');
+  // The symbols stay readable: light on a dimmed dark bar, dark on a light one.
+  const light = (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255 > 0.45;
+  const symbolColor = light ? TITLE_BAR.light.symbolColor : TITLE_BAR.dark.symbolColor;
+  win.setTitleBarOverlay({ color, symbolColor, height: TITLE_BAR_HEIGHT });
+}
+
+ipcMain.handle('title-bar-tint', (event, colours) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (!win) return;
+  titleBarTints.set(win, (Array.isArray(colours) ? colours.slice(0, 6) : []).map(parseRgba).filter(Boolean));
+  paintTitleBar(win);
 });
 
 function createWindow() {
@@ -126,9 +164,55 @@ function createWindow() {
     webPreferences.contextIsolation = true;
   });
 
+  // The tools' shortcuts work wherever the keyboard is in the window: in the
+  // interface, or inside a device screen, whose keys never reach the interface.
+  const onKey = (event, input) => {
+    const tool = toolForKey(input);
+    if (!tool) return;
+    event.preventDefault();
+    win.webContents.send('shortcut', tool);
+  };
+  win.webContents.on('before-input-event', onKey);
+  win.webContents.on('did-attach-webview', (_e, guest) => guest.on('before-input-event', onKey));
+  claimPrintScreen(win);
+
   win.loadFile(path.join(__dirname, 'app', 'index.html'));
   return win;
 }
+
+// ---- Shortcuts for the tools ------------------------------------------------
+// Alt + the tool's letter. Keys are matched by position, not by the letter typed,
+// so the same keys work with any keyboard layout (Arabic, French, ...). Input
+// that names no position (some on-screen keyboards and remote desktops) is
+// matched by the letter instead.
+const TOOL_KEYS = { KeyN: 'note-anywhere', KeyR: 'review-notes', KeyO: 'find-overflow', KeyS: 'screenshot-all' };
+function toolForKey(input) {
+  if (input.type !== 'keyDown' || input.isAutoRepeat || !input.alt || input.control || input.shift || input.meta) return null;
+  const code = input.code || (/^[a-z]$/i.test(input.key) ? 'Key' + input.key.toUpperCase() : '');
+  return TOOL_KEYS[code] || null;
+}
+
+// The Print Screen key starts Note anywhere, but only while this window is in
+// front: it is claimed when the window gets the focus and given back when it
+// loses it, so in every other program it still does what it did before (the
+// Snipping Tool, or a screenshot app). Windows does not hand an app the key
+// itself, so it is claimed as a system-wide shortcut. If another program holds
+// it already, the key keeps doing what that program does.
+function claimPrintScreen(win) {
+  const release = () => globalShortcut.unregister('PrintScreen');
+  const claim = () => {
+    if (globalShortcut.isRegistered('PrintScreen')) return;
+    globalShortcut.register('PrintScreen', () => {
+      if (!win.isDestroyed() && win.isFocused()) win.webContents.send('shortcut', 'note-anywhere');
+    });
+  };
+  win.on('focus', claim);
+  win.on('blur', release);
+  win.on('closed', release);
+  if (win.isFocused()) claim();
+}
+
+app.on('will-quit', () => globalShortcut.unregisterAll());
 
 // Shows a window that was created hidden, maximised, and then asks the
 // first-start question about the output folder if it is still open.

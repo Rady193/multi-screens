@@ -1625,6 +1625,15 @@ async function init() {
   document.addEventListener('mousedown', (e) => {
     if (!$('popover').hidden && !$('popover').contains(e.target) && !e.target.closest('.pop-btn')) closePopover();
   });
+  // The tools' shortcuts (Alt + N, R, O, S, and the Print Screen key for Note
+  // anywhere) come from the main process, so they also work while the keyboard
+  // is in a device screen. They wait while the review screen, an enlarged
+  // picture or a comment being written is open.
+  const toolButtons = { 'note-anywhere': 'window-note-btn', 'review-notes': 'notes-btn', 'find-overflow': 'overflow', 'screenshot-all': 'shot-all' };
+  api.onShortcut((tool) => {
+    if (!$('review-modal').hidden || !$('zoom-view').hidden || !$('note-editor').hidden) return;
+    if (toolButtons[tool]) $(toolButtons[tool]).click();
+  });
 
   const sizes = store.get('sizes', {});
   const hidden = store.get('hidden', []);
@@ -1696,6 +1705,27 @@ async function init() {
     toast('Site data cleared.');
   });
 
+  // Windows draws the window buttons over the page, where an overlay that dims or
+  // tints the whole window cannot reach; the main process paints them to match
+  // the overlays open, given bottom first.
+  const windowOverlays = ['window-note-layer', 'review-modal', 'zoom-view'].map($);
+  let overlayTints = '';
+  const tintTitleBar = (force) => {
+    if (!cfg.customTitleBar) return;
+    const colours = [];
+    for (const el of windowOverlays.filter((o) => !o.hidden)) {
+      colours.push(getComputedStyle(el).backgroundColor);
+      // The enlarged picture's bar runs under the window buttons, over its backdrop.
+      const bar = el.querySelector(':scope > .zoom-bar');
+      if (bar) colours.push(getComputedStyle(bar).backgroundColor);
+    }
+    if (!force && colours.join('|') === overlayTints) return;
+    overlayTints = colours.join('|');
+    api.titleBarTint(colours);
+  };
+  const overlayWatch = new MutationObserver(() => tintTitleBar());
+  for (const el of windowOverlays) overlayWatch.observe(el, { attributes: true, attributeFilter: ['hidden'] });
+
   // App appearance (separate from the page theme the previewed site sees).
   const applyTheme = (theme) => {
     document.documentElement.dataset.theme = theme;
@@ -1703,6 +1733,7 @@ async function init() {
     $('theme-toggle').title = theme === 'dark' ? 'Switch to light appearance' : 'Switch to dark appearance';
     store.set('appTheme', theme);
     api.setTheme(theme);
+    tintTitleBar(true); // the overlays' colours differ between appearances
   };
   applyTheme(store.get('appTheme', 'dark'));
   $('theme-toggle').addEventListener('click', () => {
