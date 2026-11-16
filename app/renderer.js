@@ -1626,10 +1626,9 @@ async function init() {
   document.addEventListener('mousedown', (e) => {
     if (!$('popover').hidden && !$('popover').contains(e.target) && !e.target.closest('.pop-btn')) closePopover();
   });
-  // The tools' shortcuts (Alt + N, R, O, S, and the Print Screen key for Note
-  // anywhere) come from the main process, so they also work while the keyboard
-  // is in a device screen. They wait while the review screen, an enlarged
-  // picture or a comment being written is open.
+  // The tools' shortcuts (Alt + N, R, O, S) come from the main process, so they
+  // also work while the keyboard is in a device screen. They wait while the
+  // review screen, an enlarged picture or a comment being written is open.
   const toolButtons = { 'note-anywhere': 'window-note-btn', 'review-notes': 'notes-btn', 'find-overflow': 'overflow', 'screenshot-all': 'shot-all' };
   api.onShortcut((tool) => {
     if (!$('review-modal').hidden || !$('zoom-view').hidden || !$('note-editor').hidden) return;

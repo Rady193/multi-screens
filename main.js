@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, webContents, shell, session, safeStorage, nativeImage, dialog, screen, net, clipboard, globalShortcut } = require('electron');
+const { app, BrowserWindow, ipcMain, webContents, shell, session, safeStorage, nativeImage, dialog, screen, net, clipboard } = require('electron');
 const crypto = require('crypto');
 const { execFile, spawn } = require('child_process');
 const path = require('path');
@@ -174,7 +174,6 @@ function createWindow() {
   };
   win.webContents.on('before-input-event', onKey);
   win.webContents.on('did-attach-webview', (_e, guest) => guest.on('before-input-event', onKey));
-  claimPrintScreen(win);
 
   win.loadFile(path.join(__dirname, 'app', 'index.html'));
   return win;
@@ -191,28 +190,6 @@ function toolForKey(input) {
   const code = input.code || (/^[a-z]$/i.test(input.key) ? 'Key' + input.key.toUpperCase() : '');
   return TOOL_KEYS[code] || null;
 }
-
-// The Print Screen key starts Note anywhere, but only while this window is in
-// front: it is claimed when the window gets the focus and given back when it
-// loses it, so in every other program it still does what it did before (the
-// Snipping Tool, or a screenshot app). Windows does not hand an app the key
-// itself, so it is claimed as a system-wide shortcut. If another program holds
-// it already, the key keeps doing what that program does.
-function claimPrintScreen(win) {
-  const release = () => globalShortcut.unregister('PrintScreen');
-  const claim = () => {
-    if (globalShortcut.isRegistered('PrintScreen')) return;
-    globalShortcut.register('PrintScreen', () => {
-      if (!win.isDestroyed() && win.isFocused()) win.webContents.send('shortcut', 'note-anywhere');
-    });
-  };
-  win.on('focus', claim);
-  win.on('blur', release);
-  win.on('closed', release);
-  if (win.isFocused()) claim();
-}
-
-app.on('will-quit', () => globalShortcut.unregisterAll());
 
 // Shows a window that was created hidden, maximised, and then asks the
 // first-start question about the output folder if it is still open.
