@@ -245,6 +245,10 @@ Things to know:
 | F5 or Ctrl+R | Reload all screens |
 | Ctrl+Shift+R, or Shift-click the reload button | Reload all screens without the cache |
 | Ctrl+L | Jump to the address bar |
+| Alt+N, or the Print Screen key | Note anywhere. Print Screen does this only while the Multi Screens window is in front; in other programs it does what it did before. |
+| Alt+R | Review notes |
+| Alt+O | Find overflow |
+| Alt+S | Screenshot all |
 | Esc | Close an open panel or the enlarged picture, or cancel a note being placed |
 | Ctrl + mouse wheel | Zoom the enlarged picture of a note |
 
