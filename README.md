@@ -308,7 +308,7 @@ Notes:
 
 ### The handbook
 
-`Multi Screens Handbook.pdf`, in the SCAFFApps brochure style, and a copy named for the release in `release/` (`Multi-Screens-Handbook-<version>.pdf`, the name the SCAFFApps Suite looks for):
+`release/Multi-Screens-Handbook-<version>.pdf`, in the SCAFFApps brochure style: its only copy, attached to the GitHub release (the name the SCAFFApps Suite looks for):
 
 ```bash
 python handbook\build_handbook.py              # retakes the pictures, then prints

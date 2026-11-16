@@ -1,5 +1,5 @@
-"""Makes the Multi Screens handbook: "Multi Screens Handbook.pdf" in the project folder, and a copy named for the
-release in release/ (Multi-Screens-Handbook-<version>.pdf, the name the SCAFFApps Suite looks for).
+"""Makes the Multi Screens handbook: release/Multi-Screens-Handbook-<version>.pdf, its only copy (the name the SCAFFApps
+Suite looks for; attached to the GitHub release).
 
     python handbook\\build_handbook.py              retake the pictures, then print
     python handbook\\build_handbook.py --no-shots   print with the pictures as they are
@@ -110,26 +110,29 @@ def main_session(work, demo, api):
         go(w, demo + "orders.html", 2.5)
         go(w, demo)
         quiet(w)
+        # the pictures in both appearances, mixed through the handbook (the theme changes only with nothing open)
         w.shot(IMG / "main-dark.png")
         stage = w.rect("#stage")
         w.shot(IMG / "devices.png", pad(stage, 0))
-        phones = union(pane(w, 0)["pane"], pane(w, 1)["pane"], p=10)
-        w.shot(IMG / "phones.png", phones)
         theme(w, "light")
         quiet(w)
         w.shot(IMG / "main-light.png")
-        theme(w, "dark")
+        phones = union(pane(w, 0)["pane"], pane(w, 1)["pane"], p=10)
+        w.shot(IMG / "phones.png", phones)
         w.click("#outline")
         time.sleep(1)
         w.shot(IMG / "outlines.png", union(pane(w, 0)["pane"], pane(w, 1)["pane"], p=10))
         w.click("#outline")
         time.sleep(0.6)
+        theme(w, "dark")
 
-        # close-ups: the two bars, the view buttons, the buttons under a screen
+        # close-ups: the two bars, the view buttons (dark), the buttons under a screen (light)
         top = w.rect("#stage")["y"]
         quiet(w)
         w.shot(IMG / "bars.png", {"x": 0, "y": 0, "width": w.js("innerWidth"), "height": top - 6})
         w.shot(IMG / "views.png", union(w.rect("#fit"), w.rect("#zoom-label"), p=8))
+        theme(w, "light")
+        quiet(w)
         w.shot(IMG / "tools.png", pad(w.js("""(() => { const r = document.querySelectorAll('.pane-actions')[3].getBoundingClientRect();
             return {x: r.left, y: r.top, w: r.width, h: r.height} })()"""), 8))
         w.click("#fit-each")                       # the Large view
@@ -139,7 +142,7 @@ def main_session(work, demo, api):
         w.click("#fit")
         time.sleep(1.5)
 
-        # a note: an area on the iPhone, its box open
+        # a note: an area on the iPhone, its box open (light)
         note(w, 1, "The cards are too close to the edge on the iPhone: add some room on the left and right.",
              area=(0.06, 0.52, 0.94, 0.80))
         ed = w.rect("#note-editor")
@@ -150,7 +153,9 @@ def main_session(work, demo, api):
         note(w, 0, "The heading is cut on the Samsung: let it wrap onto two lines.", area=(0.05, 0.22, 0.98, 0.40))
         save_note(w)
 
-        # Note anywhere: one area across the two phones
+        # Note anywhere: one area across the two phones (dark)
+        theme(w, "dark")
+        quiet(w)
         w.click("#window-note-btn")
         time.sleep(0.8)
         a, b = pane(w, 0)["layer"], pane(w, 1)["layer"]
@@ -163,7 +168,8 @@ def main_session(work, demo, api):
         w.shot(IMG / "note-anywhere.png", union(pane(w, 0)["pane"], pane(w, 1)["pane"], w.rect("#note-editor"), p=14))
         save_note(w)
 
-        # the review screen, an enlarged picture, the report
+        # the review screen, an enlarged picture, the report; then Settings and History (light)
+        theme(w, "light")
         quiet(w)
         w.click("#notes-btn")
         w.wait("!document.getElementById('review-modal').hidden")
@@ -198,6 +204,7 @@ def main_session(work, demo, api):
         time.sleep(0.8)
         w.shot(IMG / "history.png", pad(w.rect("#popover"), 6))
         escape(w)
+        theme(w, "dark")                           # saved logins and the layout checks: dark
         go(w, demo + "signin.html", 3)
         w.click("#logins-btn")
         time.sleep(0.8)
@@ -294,19 +301,12 @@ def main():
     a = ap.parse_args()
     if not a.no_shots:
         shots(a.only)
-    # printed in handbook/build (never open anywhere), then copied: beside the source and, named for the release, in
-    # release/; a copy a PDF reader has open is left as it is, and said so
+    # printed in handbook/build (never open anywhere), then moved into release/, named for the release: the only
+    # copy (the name the SCAFFApps Suite looks for, attached to the GitHub release)
     (HERE / "build").mkdir(exist_ok=True)
     pdf = kit.print_pdf(HERE / "handbook.html", HERE / "build" / "Multi Screens Handbook.pdf",
                         HERE / "preview" if a.preview else None, chromium=a.chromium)
-    print(f"{pdf} ({pdf.stat().st_size // 1024} KB)")
-    (ROOT / "release").mkdir(exist_ok=True)
-    for target in (ROOT / "Multi Screens Handbook.pdf", ROOT / "release" / f"Multi-Screens-Handbook-{VERSION}.pdf"):
-        try:
-            shutil.copy2(pdf, target)
-            print(f"and {target}")
-        except PermissionError:
-            print(f"!! {target} is open in another program: close it and build again to replace it")
+    kit.to_release(pdf, ROOT / "release" / f"Multi-Screens-Handbook-{VERSION}.pdf")
     # release/ keeps only the newest handbook; the earlier ones stay on their GitHub releases
     newest = tuple(int(x) for x in VERSION.split("."))
     for old in (ROOT / "release").glob("Multi-Screens-Handbook-*.pdf"):

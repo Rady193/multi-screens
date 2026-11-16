@@ -9,14 +9,14 @@ The Print Screen key is left to Smart Snap.
 | File | Size | SHA-256 |
 |---|---|---|
 | `Multi-Screens-Setup-1.10.2.exe` | 78.0 MB | `7A86DC64DC17219804508E5EC90731DEC5831B8AB0E9CDA16FEFC0B393BCD78F` |
-| `Multi-Screens-Handbook-1.10.2.pdf` | 4.1 MB | `AEA16BCB0EF0E0D675DC884EA217E52FF5280C84650F3291615EBC092174A188` |
+| `Multi-Screens-Handbook-1.10.2.pdf` | 4.6 MB | `0E68E147BE9B093CC66422ABF65C8AE5DACEF97E09547D7752DA4E7125A6BE50` |
 
 For 64-bit Windows 10 and 11. Not code-signed, so Windows SmartScreen may ask for confirmation on first run.
 
 ### Changed
 
 - **Print Screen no longer starts Note anywhere.** Windows 11 gives the key to its Snipping Tool before any app sees it, and Smart Snap 1.2 now takes it for an area snap in every program, Multi Screens included. **Alt+N** still starts Note anywhere.
-- **The handbook**, `Multi-Screens-Handbook-1.10.2.pdf`, with the Keys page to match.
+- **The handbook**, `Multi-Screens-Handbook-1.10.2.pdf`, with the Keys page to match. Replaced the same day: its pictures retaken, mixed between the dark and light appearance, and the SCAFFApps Suite on the back page as it is in 1.0.3.
 
 ### Updating from 1.10.1
 

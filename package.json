@@ -56,7 +56,8 @@
       "shortcutName": "Multi Screens",
       "artifactName": "Multi-Screens-Setup-${version}.${ext}",
       "include": "build/installer.nsh",
-      "menuCategory": "SCAFFApps"
+      "menuCategory": "SCAFFApps",
+      "differentialPackage": false
     },
     "mac": {
       "target": "dmg",

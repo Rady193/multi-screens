@@ -327,7 +327,7 @@ def suite_pictures(img, tools):
                 print("!! the Suite was still checking GitHub")
             time.sleep(1)
             # not "My apps": it shows where each app is installed, which the handbooks leave out
-            for view, theme, name in (("home", "dark", "home"), ("updates", "dark", "updates"),
+            for view, theme, name in (("home", "dark", "home"), ("updates", "light", "updates"),
                                       ("settings", "dark", "settings"), ("home", "light", "home-light")):
                 if w.js("document.documentElement.dataset.theme") != theme:
                     w.js("document.getElementById('tbTheme').click()")
@@ -349,6 +349,26 @@ def pdf_page_png(pdf, png, page=0, width=1600):
     doc = pdfium.PdfDocument(str(pdf))
     p = doc[page]
     p.render(scale=width / p.get_width()).to_pil().save(png)
+
+
+def to_release(pdf, target):
+    """The printed handbook into release/, named for the release: the only copy. It is moved out of the print folder
+    (handbook/build), which goes once it is empty. When a PDF reader has the copy in release/ open, that one is left
+    as it is and the new one stays in the print folder, and both are said."""
+    pdf, target = Path(pdf), Path(target)
+    target.parent.mkdir(exist_ok=True)
+    size = pdf.stat().st_size // 1024
+    try:
+        os.replace(pdf, target)
+    except PermissionError:
+        print(f"!! {target} is open in another program: close it and build again (the new handbook is {pdf})")
+        return pdf
+    try:
+        pdf.parent.rmdir()
+    except OSError:
+        pass
+    print(f"{target} ({size} KB)")
+    return target
 
 
 def print_pdf(html, pdf, preview=None, channel="msedge", chromium=None):
