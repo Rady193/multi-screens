@@ -1,5 +1,47 @@
 # Release notes
 
+## 1.10.0 — 16 November 2026
+
+Shortcuts for the tools, Print Screen for Note anywhere, and window buttons that dim with the review screen.
+
+### Downloads
+
+| File | Size | SHA-256 |
+|---|---|---|
+| `Multi-Screens-Setup-1.10.0.exe` | 78.0 MB | `B8682BF13693EC4AA03F5926FEF132C34C1E0E0A199417290FD4622F37AC51D0` |
+| `Multi-Screens-Handbook-1.10.0.pdf` | 4.3 MB | `09F171D9AE5804504B5481FB742556028400B713DCB780D340DCF835CB11F30F` |
+
+For 64-bit Windows 10 and 11. Not code-signed, so Windows SmartScreen may ask for confirmation on first run.
+
+### Added
+
+- **Shortcuts for the tools**: **Alt+N** Note anywhere, **Alt+R** Review notes, **Alt+O** Find overflow, **Alt+S** Screenshot all. They also work while you are in a device screen, and with any keyboard layout. They wait while the review screen, an enlarged picture or a comment being written is open.
+- **The Print Screen key starts Note anywhere** while the Multi Screens window is in front. In every other program it does what it did before.
+
+### Fixed
+
+- **The window buttons** (minimise, maximise, close) dim with the review screen, an enlarged picture and Note anywhere, instead of staying bright on top of them.
+
+### Changed
+
+- **The handbook**, `Multi-Screens-Handbook-1.10.0.pdf`, with the shortcuts on the Keys page.
+
+### Updating from 1.9.0
+
+- Settings > Updates > **Update now**, or **Update** in the SCAFFApps Suite.
+
+### Tested
+
+- Alt+N, R, O and S pressed on a keyboard (sent through Windows) in the interface and inside a device screen: each runs its tool; the page does not get them, other keys such as Alt+X still reach it.
+- Print Screen is claimed when the window gets the focus and given back when it loses it.
+- The window buttons in both appearances under the review screen, an enlarged picture and Note anywhere: the same colour as the page beside them, back to normal when each closes.
+- 1.9.0 installed offers this version (the handbook's update picture), and this installer over 1.9.0 as Update now runs it: installed in 7 seconds, Windows lists 1.10.0, and it opens.
+- Microsoft Defender finds nothing in the installer.
+
+### Not tested
+
+- **Print Screen with another screenshot program that also watches the key** (here Adobe Photoshop Express): both may answer it while Multi Screens is in front.
+
 ## 1.9.0 — 16 November 2026
 
 Copy a review report as a picture, and the tools beside the device chips.
