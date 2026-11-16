@@ -321,8 +321,8 @@ def suite_pictures(img, tools):
             w.front()
             # it reads the installed apps and asks GitHub for the releases: wait until it has the answers
             time.sleep(3)
-            try:          # its own status, bottom left: "Up to date · just now" once GitHub has answered
-                w.wait("!/Checking/.test(document.body.innerText) && /just now/.test(document.body.innerText)", 60)
+            try:          # S.checkedAt is set (and S.checking cleared) once GitHub has answered
+                w.wait("typeof S !== 'undefined' && S && S.checkedAt && !S.checking", 60)
             except TimeoutError:
                 print("!! the Suite was still checking GitHub")
             time.sleep(1)
