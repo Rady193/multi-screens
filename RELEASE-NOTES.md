@@ -1,5 +1,32 @@
 # Release notes
 
+## 1.10.2 — 16 November 2026
+
+The Print Screen key is left to Smart Snap.
+
+### Downloads
+
+| File | Size | SHA-256 |
+|---|---|---|
+| `Multi-Screens-Setup-1.10.2.exe` | 78.0 MB | `7A86DC64DC17219804508E5EC90731DEC5831B8AB0E9CDA16FEFC0B393BCD78F` |
+| `Multi-Screens-Handbook-1.10.2.pdf` | 4.1 MB | `AEA16BCB0EF0E0D675DC884EA217E52FF5280C84650F3291615EBC092174A188` |
+
+For 64-bit Windows 10 and 11. Not code-signed, so Windows SmartScreen may ask for confirmation on first run.
+
+### Changed
+
+- **Print Screen no longer starts Note anywhere.** Windows 11 gives the key to its Snipping Tool before any app sees it, and Smart Snap 1.2 now takes it for an area snap in every program, Multi Screens included. **Alt+N** still starts Note anywhere.
+- **The handbook**, `Multi-Screens-Handbook-1.10.2.pdf`, with the Keys page to match.
+
+### Updating from 1.10.1
+
+- Settings > Updates > **Update now**, or **Update** in the SCAFFApps Suite.
+
+### Tested
+
+- This installer over 1.10.1 on a working computer, silently with Windows' permission: installed in 4 seconds, Windows lists 1.10.2. The installed app has no Print Screen shortcut left in it.
+- Microsoft Defender finds nothing in the installer.
+
 ## 1.10.1 — 16 November 2026
 
 Enter saves a note.

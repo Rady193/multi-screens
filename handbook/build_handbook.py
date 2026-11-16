@@ -220,7 +220,11 @@ def main_session(work, demo, api):
 
 def update_session(work):
     """A newer version on a stand-in for GitHub: what Settings shows when an update is waiting."""
-    rel = kit.release(work / "release", VERSION, "Multi Screens", f"Multi-Screens-Setup-{VERSION}.exe")   # the release being made
+    # The example offer: the next minor version, newer than the installed copy even when this release is
+    # installed already (a fixed number, or this version, would then read "You have the latest version").
+    major, minor = VERSION.split(".")[:2]
+    example = f"{major}.{int(minor) + 1}.0"
+    rel = kit.release(work / "release", example, "Multi Screens", f"Multi-Screens-Setup-{example}.exe")
     with kit.Serve(rel) as api:
         env = kit.registration(work / "registration.json", "multi-screens", VERSION)
         env.update(MULTI_SCREENS_OUTPUT_DIR=str(work / "out"), MULTI_SCREENS_UPDATE_API=api.url + "latest")
