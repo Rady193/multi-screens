@@ -307,6 +307,13 @@ def main():
             print(f"and {target}")
         except PermissionError:
             print(f"!! {target} is open in another program: close it and build again to replace it")
+    # release/ keeps only the newest handbook; the earlier ones stay on their GitHub releases
+    newest = tuple(int(x) for x in VERSION.split("."))
+    for old in (ROOT / "release").glob("Multi-Screens-Handbook-*.pdf"):
+        v = old.stem.rsplit("-", 1)[-1]
+        if v.replace(".", "").isdigit() and tuple(int(x) for x in v.split(".")) < newest:
+            old.unlink(missing_ok=True)
+            print(f"removed the older {old.name}")
 
 
 if __name__ == "__main__":

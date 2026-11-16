@@ -39,6 +39,7 @@
     },
     "electronDist": "node_modules/electron/dist",
     "afterPack": "build/after-pack.js",
+    "afterAllArtifactBuild": "build/keep-latest.js",
     "win": {
       "target": [
         "nsis"
