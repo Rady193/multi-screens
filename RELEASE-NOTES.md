@@ -1,5 +1,37 @@
 # Release notes
 
+## 1.10.3 — 18 November 2026
+
+The Page theme and Network lists in the SCAFFApps colours.
+
+### Downloads
+
+| File | Size | SHA-256 |
+|---|---|---|
+| `Multi-Screens-Setup-1.10.3.exe` | 71.1 MB | `117E7EB9784BF14D8B676C013852F487D8E27A1F2A7224B71291203C3537959A` |
+| `Multi-Screens-Handbook-1.10.3.pdf` | 4.6 MB | `354B1F658C65B9BA7D6EB09E8453AF996C60170C9332FD317E0AA8FF5CBBFA76` |
+
+For 64-bit Windows 10 and 11. Not code-signed, so Windows SmartScreen may ask for confirmation on first run.
+
+### Changed
+
+- **The Page theme and Network lists** open in the SCAFFApps colours: a card in the window's own colours, the chosen item in gold (purple in the light appearance) with a tick, the one under the pointer lit in grey, as in every SCAFFApps menu. It was the list Windows draws, in its own blue with a grey frame. The arrow keys, Enter and Esc work as before, and nothing beside the list moves. Smart Snap 1.3.1 has the same lists, from the same code.
+- **The handbook**, `Multi-Screens-Handbook-1.10.3.pdf`: 1.10.2's pages and pictures, with the new version.
+
+### Updating from 1.10.2 or earlier
+
+- Settings > Updates > **Update now**, or **Update** in the SCAFFApps Suite.
+
+### Tested
+
+- The packaged program in a test profile: both lists are the new ones, as wide and as high as before; choosing Slow 4G sets the network and saves it, and after a restart the Network list shows Slow 4G again.
+- The window in Edge: both lists open in the dark and the light appearance, their words whole.
+- The SCAFFApps design-language check passes, the new shared files included. Microsoft Defender finds nothing in the installer.
+
+### Not tested
+
+- This installer over 1.10.2.
+
 ## 1.10.2 — 16 November 2026
 
 The Print Screen key is left to Smart Snap.

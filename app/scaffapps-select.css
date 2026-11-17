@@ -1,0 +1,28 @@
+/* The SCAFFApps drop-down list (scaffapps-select.js): each <select> shown as a button in the controls' look, and its
+   list as a SCAFFApps pop-up: a --surface card with a --line-strong border, rows 28 high, --surface-3 under the pointer,
+   the chosen one in --accent with a tick. Never the list Windows and Chromium draw (blue rows, a grey frame).
+   Master copy: SCAFFApps Brand/apps/web/scaffapps-select.css; each app has it word for word. */
+.sc-select-native { display: none !important; }
+.sc-select {
+  display: inline-flex; align-items: center; justify-content: space-between; gap: 4px; min-width: 0; height: 32px;
+  padding: 0 6px 0 8px; color: var(--text); background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px;
+  font: inherit; font-weight: 400; text-align: left; white-space: nowrap; cursor: pointer;
+}
+.sc-select > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.sc-select:hover:not(:disabled) { background: var(--surface-3); border-color: var(--line-strong); }
+.sc-select[aria-expanded="true"] { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.sc-select:disabled { opacity: .45; cursor: default; }
+.sc-select svg, .sc-list svg { flex: none; width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.sc-select svg { color: var(--dim); }
+.sc-list {
+  position: fixed; z-index: 1000; box-sizing: border-box; overflow-y: auto; margin: 0; padding: 4px; list-style: none;
+  color: var(--text); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .35); font: 13px/1.4 "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+}
+:root[data-theme="light"] .sc-list { box-shadow: 0 12px 30px rgba(23, 20, 28, .18); }
+.sc-list li { display: flex; align-items: center; justify-content: space-between; gap: 18px; height: 28px; padding: 0 8px 0 10px; border-radius: 6px; white-space: nowrap; cursor: default; }
+.sc-list li.active { background: var(--surface-3); }
+.sc-list li.on { color: var(--accent); font-weight: 600; }
+.sc-list li svg { visibility: hidden; }
+.sc-list li.on svg { visibility: visible; }
+.sc-list li.off { opacity: .45; }
