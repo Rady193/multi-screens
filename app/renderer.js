@@ -69,6 +69,7 @@ const ICONS = {
   folder: '<path d="M3.5 7A1.5 1.5 0 0 1 5 5.5h4.3l2 2H19A1.5 1.5 0 0 1 20.5 9v8.5A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5z"/>',
   expand: '<path d="M14 4.5h5.5V10M19.5 4.5 13 11M10 19.5H4.5V14M4.5 19.5 11 13"/>',
   copy: '<rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6A1.5 1.5 0 0 0 14 4.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5"/>',
+  spell: '<path d="M2.5 15.5 6.6 5l4.1 10.5M4 11.7h5.2"/><path d="m11.5 15.2 3.6 3.6 6.6-7.6"/>',
   trash: '<path d="M4.5 7h15"/><path d="M9.5 7V5h5v2"/><path d="M6.5 7l.8 11.500A1.5 1.5 0 0 0 8.8 20h6.400a1.5 1.5 0 0 0 1.5-1.500L17.5 7"/>',
 };
 const icon = (name) =>
@@ -1350,13 +1351,20 @@ function openNoteEditor(pane, number, x, y) {
     await refreshNotes();
     toast(`Note ${number} saved for ${device.name}.`);
   };
-  // Enter saves; Shift+Enter starts a new line (Ctrl+Enter still saves too).
+  // Fix spelling (F7): what it fixed and the words to choose for show under the text (scaffapps-spelling.js).
+  const panel = h('div', { className: 'spell', hidden: true });
+  const spelling = ScaffSpelling.attach({ box: text, panel, check: (t) => api.spelling(t), changed: () => keepOnScreen(editor) });
+  // Enter saves; Shift+Enter starts a new line (Ctrl+Enter still saves too). F7 fixes the spelling, as in Word.
   text.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); save(); }
+    else if (e.key === 'F7') { e.preventDefault(); spelling.run(); }
   });
   editor.replaceChildren(
-    h('strong', { textContent: `Note ${number} · ${device.name}` }),
+    h('div', { className: 'note-editor-head' },
+      h('strong', { textContent: `Note ${number} · ${device.name}` }),
+      fixButton(() => spelling.run())),
     text,
+    panel,
     h('div', { className: 'note-editor-row' },
       h('span', { className: 'pop-note', textContent: 'Enter saves' }),
       h('button', { className: 'small', textContent: 'Cancel', onclick: cancelNoting }),
@@ -1365,6 +1373,18 @@ function openNoteEditor(pane, number, x, y) {
   editor.style.left = Math.max(8, Math.min(x + 16, window.innerWidth - 316)) + 'px';
   editor.style.top = Math.max(8, Math.min(y + 16, window.innerHeight - 230)) + 'px';
   text.focus();
+}
+
+// The Fix spelling button beside a note's text (F7 does the same).
+const fixButton = (run) => h('button', {
+  type: 'button', className: 'link fix', innerHTML: icon('spell') + '<span>Fix spelling</span>', onclick: run,
+  title: 'Fix the spelling with Windows’ own spell checker, on this computer (F7)',
+});
+
+// A pop-up grown taller (the words to choose a spelling for) moves up rather than past the window's foot.
+function keepOnScreen(el) {
+  const r = el.getBoundingClientRect();
+  if (r.bottom > window.innerHeight - 8) el.style.top = Math.max(8, Math.floor(window.innerHeight - 8 - r.height)) + 'px';
 }
 
 // The screens on show are listed in the report, including those with no notes.
@@ -1493,14 +1513,19 @@ async function openReview(deviceId) {
     }
     const saved = h('span', { className: 'review-saved' });
     const text = h('textarea', { value: note.text, rows: 3, title: 'Edit the comment; it is saved when you click elsewhere' });
-    text.addEventListener('change', async () => {
+    const keep = async () => {
       const value = text.value.trim();
-      if (!value) { text.value = note.text; return; }
-      await api.notes.update(note.id, value);
+      if (!value || value === note.text) return;
       note.text = value;
+      await api.notes.update(note.id, value);
       saved.textContent = 'Saved';
       setTimeout(() => { saved.textContent = ''; }, 1600);
-    });
+    };
+    text.addEventListener('change', () => { if (!text.value.trim()) text.value = note.text; else keep(); });
+    // Fix spelling (F7); what it fixes is saved at once, as the review screen can be closed straight after.
+    const panel = h('div', { className: 'spell', hidden: true });
+    const spelling = ScaffSpelling.attach({ box: text, panel, check: (t) => api.spelling(t), changed: keep });
+    text.addEventListener('keydown', (e) => { if (e.key === 'F7') { e.preventDefault(); spelling.run(); } });
     items.append(h('div', { className: 'review-item' },
       h('div', {
         className: 'review-thumb' + (note.imgW > note.imgH ? ' wide' : ''),
@@ -1512,6 +1537,7 @@ async function openReview(deviceId) {
           h('strong', { textContent: `Note ${number}` }),
           h('span', { className: 'pop-note', textContent: `${note.deviceName} · ${note.mark.type === 'area' ? 'marked area' : 'marked spot'}` }),
           saved,
+          fixButton(() => spelling.run()),
           h('button', {
             className: 'small discard', innerHTML: icon('trash') + '<span>Discard</span>', title: 'Remove this note; it will not be in the report',
             onclick: async () => {
@@ -1521,6 +1547,7 @@ async function openReview(deviceId) {
             },
           })),
         text,
+        panel,
         h('div', { className: 'pop-note review-page', textContent: note.title ? `${note.title} — ${note.url}` : note.url }))));
   }
   // Messages appear in the footer: the review screen covers the usual toast.

@@ -2,7 +2,7 @@
 
 Multi Screens shows one web app side by side on several device screens, so you can review a page on a phone, a tablet and a laptop at the same time. What you do on one screen is repeated on the others.
 
-Version 1.10.3 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
+Version 1.11.0 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
 
 ## Contents
 
@@ -21,7 +21,7 @@ Version 1.10.3 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
 
 ## Install
 
-Download `Multi-Screens-Setup-1.10.3.exe` from the [Releases page](https://github.com/Rady193/multi-screens/releases/latest) and run it, or install it from the **SCAFFApps Suite**. It installs for everyone on the computer, in `C:\Program Files\SCAFFApps\Multi Screens` unless you choose another folder, so Windows asks for administrator permission once. It adds a desktop shortcut and a Start menu shortcut in the **SCAFFApps** folder, and can be removed from Windows Settings. A copy installed by an earlier version in `C:\Program Files\Multi Screens` moves to the SCAFFApps folder when it updates.
+Download `Multi-Screens-Setup-1.11.0.exe` from the [Releases page](https://github.com/Rady193/multi-screens/releases/latest) and run it, or install it from the **SCAFFApps Suite**. It installs for everyone on the computer, in `C:\Program Files\SCAFFApps\Multi Screens` unless you choose another folder, so Windows asks for administrator permission once. It adds a desktop shortcut and a Start menu shortcut in the **SCAFFApps** folder, and can be removed from Windows Settings. A copy installed by an earlier version in `C:\Program Files\Multi Screens` moves to the SCAFFApps folder when it updates.
 
 Since 1.8.0 Multi Screens is installed, not portable. A portable copy from before cannot update itself to it: install it with the installer once, then delete the portable file.
 
@@ -136,11 +136,11 @@ Write notes on what you see while you review, then turn them into a report.
 
 1. Under the screen you are looking at, press the **note** button (speech bubble with a plus). The screen gets a gold tint and a crosshair.
 2. **Click** the spot you mean, or **drag** a rectangle over the area.
-3. Type your comment in the box that opens and choose **Save note** (or press Enter; Shift+Enter starts a new line). The app takes a picture of that screen as it is at that moment and keeps it with the note.
+3. Type your comment in the box that opens and choose **Save note** (or press Enter; Shift+Enter starts a new line). The app takes a picture of that screen as it is at that moment and keeps it with the note. **Fix spelling**, at the box's top right (or **F7**, as in Word), corrects the comment first (see below).
 4. Carry on reviewing. Scroll, move to other pages and add as many notes as you like, on any screen.
 5. When you are done, press the **report** button (the page icon) under a screen. A red dot on the button means that screen has notes ready.
 6. A **review screen** opens before anything is created. It lists each note with its picture and marker. Here you can:
-   - **reword a comment** by typing in it (it saves when you click elsewhere),
+   - **reword a comment** by typing in it (it saves when you click elsewhere), or correct it with **Fix spelling** beside the note's name (or **F7**; what it fixes is saved at once),
    - **discard a note** you no longer want,
    - **enlarge a picture** by clicking it. The picture opens large with its marker. Zoom with the − and + buttons, by clicking a point on the picture, or with Ctrl + mouse wheel, up to six times. **Fit** shows the whole picture again and Esc closes it.
    - **Copy as picture** puts the whole report on the clipboard as one tall picture, to paste into a chat, an email or a document. Nothing is saved and the notes stay in the app, so you can still create the PDF afterwards.
@@ -152,6 +152,8 @@ The PDF opens with the site, date and counts, a summary table of devices, then o
 - a drawing of the device as it appears in the app (body, status bar with its camera cut-out, navigation bar) showing the page, with a numbered marker where you clicked or dragged,
 - a close-up of the marked spot or area,
 - the page title, address and time.
+
+**Fix spelling** corrects a note's comment with Windows' own spell checker, the one that underlines mistakes in red; nothing leaves the computer. What Windows is sure of is fixed at once: a typing slip on its autocorrect list ("teh" to "the", "i" to "I"), a word written twice, and a capital letter at the start of each sentence and line. A word it only has guesses for is shown under the text with them, the likeliest first: click the one you meant, or **Leave**. Ctrl + Z undoes the fixes. Addresses, file paths, codes, units after a number and words in capitals are left as they are. It fixes spelling, not grammar. Smart Snap's comments have the same button.
 
 **Note anywhere**, next to the device chips, works the same way on the whole app window instead of one device. Use it to mark something that spans several screens, for example to compare the same header on two phones side by side. The picture kept with the note is of the app window. It cannot mark other programs or the rest of your desktop.
 
@@ -250,6 +252,7 @@ Things to know:
 | Alt+O | Find overflow |
 | Alt+S | Screenshot all |
 | Esc | Close an open panel or the enlarged picture, or cancel a note being placed |
+| F7 | Fix the spelling of the note being written or reworded |
 | Ctrl + mouse wheel | Zoom the enlarged picture of a note |
 
 ## Where things are saved

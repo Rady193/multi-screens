@@ -1,5 +1,42 @@
 # Release notes
 
+## 1.11.0 — 20 November 2026
+
+**Fix spelling** in the note boxes, with Windows' own spell checker, on this computer.
+
+### Downloads
+
+| File | Size | SHA-256 |
+|---|---|---|
+| `Multi-Screens-Setup-1.11.0.exe` | 71.1 MB | `93845C06151F7086A6F6580391E74CE776E2F7B8CB54FB6E05A15E3EBADF83A7` |
+| `Multi-Screens-Handbook-1.11.0.pdf` | 4.6 MB | `1ABEDC2CF1A5AAA2E6896CAAEBA9DA3B59667158AF44D2637279D7F25FD2D8AD` |
+
+For 64-bit Windows 10 and 11. Not code-signed, so Windows SmartScreen may ask for confirmation on first run.
+
+### New
+
+- **Fix spelling**, at the top right of the box that opens for a new note (also for Note anywhere) and beside each note's name on the review screen, or **F7** as in Word. Windows' own spell checker reads the comment, the one that underlines mistakes in red; nothing leaves the computer. What it is sure of is fixed at once: a typing slip on its autocorrect list ("teh" to "the", "i" to "I"), a word written twice, and a capital letter at the start of each sentence and line. A word it only has guesses for is shown under the text with them, the likeliest first, to click; **Leave** keeps it. Ctrl + Z undoes the fixes. Addresses, file paths, codes, units after a number and words in capitals are left as they are. It fixes spelling, not grammar.
+- On the review screen, what Fix spelling changes is saved at once, so closing the screen straight after keeps it.
+- Smart Snap 1.4.0 has the same Fix spelling in its comment boxes, from the same code.
+
+### Changed
+
+- **The handbook**, `Multi-Screens-Handbook-1.11.0.pdf`: Review notes, The report and The keys say how to fix the spelling; the window pictures retaken.
+
+### Updating from 1.10.3 or earlier
+
+- Settings > Updates > **Update now**, or **Update** in the SCAFFApps Suite.
+
+### Tested
+
+- The note box and the review screen, from the source and from this installer's build, in a hidden test window with Windows' real spell checker (British English, as on the developer's laptop), the notes from a stand-in: "the save button is to close to the edge. i would prefere more room, e.g. 16 px." became "The save button … I would prefere …", with "prefer" offered first and "16 px" left alone; choosing it wrote "prefer". On the review screen "teh button … i would prefere it bigger." was fixed and saved at once, and saved again after the choice. A note box grown by the choices near the window's foot moved up to stay inside the window.
+- The SCAFFApps design-language check passes, the new shared files included. Microsoft Defender finds nothing in the installer or the handbook.
+
+### Not tested
+
+- With a real keyboard and mouse (the tests type and click from code), and a spell checker in another language than English.
+- This installer over 1.10.3.
+
 ## 1.10.3 — 18 November 2026
 
 The Page theme and Network lists in the SCAFFApps colours.

@@ -1,6 +1,6 @@
 {
   "name": "multi-screens",
-  "version": "1.10.3",
+  "version": "1.11.0",
   "description": "Preview one web app side by side on several device screens",
   "author": "SCAFFApps",
   "license": "SEE LICENSE IN LICENSE",
@@ -31,7 +31,9 @@
       "host-preload.js",
       "guest-preload.js",
       "app/**",
-      "monitors.ps1"
+      "monitors.ps1",
+      "scaffapps-spelling-main.js",
+      "scaffapps-spell.ps1"
     ],
     "publish": null,
     "directories": {

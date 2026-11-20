@@ -734,6 +734,23 @@ button.small.icon-only svg.icon { width: 15px; height: 15px; }
 .note-editor textarea:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
 .note-editor-row { display: flex; align-items: center; gap: 6px; }
 .note-editor-row .pop-note { flex: 1; }
+/* Fix spelling (scaffapps-spelling.js), as in Smart Snap: the button at the head's right; under the text, what it
+   fixed and the words to choose a spelling for. */
+.note-editor-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.note-editor-head strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+button.link.fix { flex: none; margin-left: auto; gap: 5px; }
+button.link.fix svg.icon { width: 15px; height: 15px; }
+.review-head button.link.fix { margin-left: 0; }
+.spell { display: flex; flex-direction: column; gap: 6px; max-height: 150px; overflow-y: auto; font-size: 12px; }
+.spell[hidden] { display: none; }
+.spell-note { color: var(--dim); }
+.spell-row { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
+.spell-word { margin-right: 3px; text-decoration: underline wavy #e5484d; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.spell button { height: 24px; padding: 0 9px; border-radius: 6px; font-size: 12px; }
+.spell button.first { color: #fff; background: var(--accent-strong); border-color: var(--accent-strong); }
+.spell button.first:hover { background: #45215f; border-color: #45215f; }
+.spell button.leave { color: var(--dim); background: transparent; border-color: transparent; }
+.spell button.leave:hover { color: var(--text); background: var(--surface-3); }
 :root[data-theme="light"] .note-editor textarea { background: var(--surface-2); }
 
 /* A frozen picture of the page, shown while a sharp capture is taken behind it. */

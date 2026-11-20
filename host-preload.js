@@ -39,6 +39,8 @@ contextBridge.exposeInMainWorld('multiScreens', {
     copyPicture: (deviceId, reviewed) => ipcRenderer.invoke('notes-copy-picture', deviceId, reviewed),
     open: (file) => ipcRenderer.invoke('notes-open', file),
   },
+  // A note's spelling mistakes, by Windows' spell checker (see scaffapps-spelling-main.js).
+  spelling: (text) => ipcRenderer.invoke('spelling-check', String(text || '')),
   updates: {
     status: () => ipcRenderer.invoke('update-status'),
     check: () => ipcRenderer.invoke('update-check'),
