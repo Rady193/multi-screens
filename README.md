@@ -2,7 +2,7 @@
 
 Multi Screens shows one web app side by side on several device screens, so you can review a page on a phone, a tablet and a laptop at the same time. What you do on one screen is repeated on the others.
 
-Version 1.11.0 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
+Version 1.11.1 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
 
 ## Contents
 
@@ -21,7 +21,7 @@ Version 1.11.0 · Windows 10 and 11 (64-bit) · Published by SCAFFApps
 
 ## Install
 
-Download `Multi-Screens-Setup-1.11.0.exe` from the [Releases page](https://github.com/Rady193/multi-screens/releases/latest) and run it, or install it from the **SCAFFApps Suite**. It installs for everyone on the computer, in `C:\Program Files\SCAFFApps\Multi Screens` unless you choose another folder, so Windows asks for administrator permission once. It adds a desktop shortcut and a Start menu shortcut in the **SCAFFApps** folder, and can be removed from Windows Settings. A copy installed by an earlier version in `C:\Program Files\Multi Screens` moves to the SCAFFApps folder when it updates.
+Download `Multi-Screens-Setup-1.11.1.exe` from the [Releases page](https://github.com/Rady193/multi-screens/releases/latest) and run it, or install it from the **SCAFFApps Suite**. It installs for everyone on the computer, in `C:\Program Files\SCAFFApps\Multi Screens` unless you choose another folder, so Windows asks for administrator permission once. It adds a desktop shortcut and a Start menu shortcut in the **SCAFFApps** folder, and can be removed from Windows Settings. A copy installed by an earlier version in `C:\Program Files\Multi Screens` moves to the SCAFFApps folder when it updates.
 
 Since 1.8.0 Multi Screens is installed, not portable. A portable copy from before cannot update itself to it: install it with the installer once, then delete the portable file.
 
@@ -35,7 +35,7 @@ No other software is needed. The browser engine is built in.
 
 Everything the app produces goes into one folder that you choose:
 
-A page of the installer titled "Output folder" asks where to save, after you pick the install location. It suggests `Documents\Multi Screens`. (Installed from the SCAFFApps Suite, without the installer's pages, the app asks once, the first time it starts.)
+A page of the installer titled "Output folder" asks where to save, after you pick the install location. It suggests `Documents\Multi Screens`, or the folder in use when Multi Screens is installed already, so clicking through a reinstall keeps it. (Installed from the SCAFFApps Suite, without the installer's pages, the app asks once, the first time it starts.)
 
 Inside that folder the app keeps three subfolders: `Screenshots`, `Videos` and `Reports`.
 

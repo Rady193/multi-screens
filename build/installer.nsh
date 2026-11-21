@@ -2,7 +2,10 @@
 ; (screenshots, video recordings and review reports).
 ;
 ; The chosen folder is written to "%APPDATA%\Multi Screens\install-output.txt",
-; which the app reads the next time it starts.
+; which the app reads the next time it starts. The page suggests the folder in use,
+; which the app keeps in "%APPDATA%\multi-screens\output-folder.txt" (its profile,
+; named after package.json's "name"), and the file is written only when the folder
+; chosen differs from it: clicking through a reinstall or an update changes nothing.
 
 ; Crisp text on a scaled screen (125%, 150%...): without this Windows draws the
 ; installer and uninstaller at 100% and stretches them, which blurs them.
@@ -16,12 +19,60 @@ ManifestDPIAware true
 
 Var OutputDirInput
 Var OutputDir
+Var InUse
 
 !macro customPageAfterChangeDir
   Page custom OutputPageCreate OutputPageLeave
 !macroend
 
+; Reads the first line of a UTF-16LE text file (with or without a BOM), as the
+; installer and the app write them. Takes the path on the stack, leaves the text
+; ("" when there is no file) on the stack.
+Function ReadText16
+  Exch $0
+  Push $1
+  Push $2
+  StrCpy $2 ""
+  ClearErrors
+  FileOpen $1 $0 r
+  ${IfNot} ${Errors}
+    FileReadWord $1 $2
+    ${If} $2 <> 0xFEFF
+      FileSeek $1 0 SET
+    ${EndIf}
+    StrCpy $2 ""
+    FileReadUTF16LE $1 $2
+    FileClose $1
+  ${EndIf}
+  StrCpy $1 $2 1 -1
+  ${If} $1 == "$\n"
+    StrCpy $2 $2 -1
+    StrCpy $1 $2 1 -1
+  ${EndIf}
+  ${If} $1 == "$\r"
+    StrCpy $2 $2 -1
+  ${EndIf}
+  StrCpy $0 $2
+  Pop $2
+  Pop $1
+  Exch $0
+FunctionEnd
+
 Function OutputPageCreate
+  ${If} $OutputDir == ""
+    ; The folder in use when Multi Screens is installed already, else the
+    ; folder chosen at the last install.
+    ReadEnvStr $1 APPDATA
+    Push "$1\multi-screens\output-folder.txt"
+    Call ReadText16
+    Pop $InUse
+    StrCpy $OutputDir $InUse
+    ${If} $OutputDir == ""
+      Push "$1\Multi Screens\install-output.txt"
+      Call ReadText16
+      Pop $OutputDir
+    ${EndIf}
+  ${EndIf}
   ${If} $OutputDir == ""
     ; The installer installs for all users (Program Files), where $DOCUMENTS
     ; means Public Documents: suggest the user's own Documents instead.
@@ -67,13 +118,17 @@ Function OutputPageLeave
 FunctionEnd
 
 !macro customInstall
-  ; Empty when the installer runs silently: the app then asks on first start.
+  ; Empty when the installer runs silently: the app then keeps its folder, or asks on first start.
   ${If} $OutputDir != ""
-    ReadEnvStr $1 APPDATA
-    CreateDirectory "$1\Multi Screens"
-    FileOpen $0 "$1\Multi Screens\install-output.txt" w
-    FileWriteUTF16LE /BOM $0 "$OutputDir"
-    FileClose $0
+    ; Kept as it was when the page still shows the folder in use, so the app
+    ; does not take an unchanged page for a new choice.
+    ${If} $OutputDir != $InUse
+      ReadEnvStr $1 APPDATA
+      CreateDirectory "$1\Multi Screens"
+      FileOpen $0 "$1\Multi Screens\install-output.txt" w
+      FileWriteUTF16LE /BOM $0 "$OutputDir"
+      FileClose $0
+    ${EndIf}
     CreateDirectory "$OutputDir"
   ${EndIf}
   ; Moved from the old default folder (customInit): the old version's uninstaller empties it but leaves the folder.

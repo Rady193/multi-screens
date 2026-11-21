@@ -270,27 +270,77 @@ async function applyEmulation(id, d) {
 // one folder, each kind in its own subfolder. The folder is chosen in the
 // installer; without an installer (the portable app) it is asked on first start.
 const settingsFile = () => path.join(app.getPath('userData'), 'settings.json');
-const installChoiceFile = () => path.join(app.getPath('userData'), 'install-output.txt');
+// The installer (build/installer.nsh) writes its choice to "%APPDATA%\Multi Screens",
+// named after the product, but this app's profile is "%APPDATA%\multi-screens":
+// package.json has no top-level productName, and adding one would move the profile
+// away from users' settings, saved logins and review notes. So the file is read
+// where the installer puts it; the profile is only a fallback.
+const installChoiceFiles = () => [
+  path.join(app.getPath('appData'), 'Multi Screens', 'install-output.txt'),
+  path.join(app.getPath('userData'), 'install-output.txt'),
+];
+// The folder in use, for the installer: its Output folder page suggests it, so
+// clicking through a reinstall or an update keeps it. UTF-16LE with a BOM, as the
+// installer writes its own file; installer.nsh reads it from "%APPDATA%\multi-screens".
+const folderInUseFile = () => path.join(app.getPath('userData'), 'output-folder.txt');
 const defaultOutputFolder = () => path.join(app.getPath('documents'), 'Multi Screens');
 let settings = null;
+
+const readText16 = (file) => fs.readFileSync(file, 'utf16le').replace(/^\uFEFF/, '').trim();
+
+// True when the installer ran after the app last saved its settings (the app is
+// closed while it installs), or when there are no saved settings yet.
+function installedSinceSettings(file) {
+  try { return fs.statSync(file).mtimeMs > fs.statSync(settingsFile()).mtimeMs; } catch { return true; }
+}
+
+// The installer leaves its choice in a small text file, and writes it only when
+// the folder chosen on its page differs from the one in use. Adopt it when the
+// file is new (another folder, or the same one written again), so a reinstall
+// with a different folder takes effect, while a later change made in the app's
+// Settings is not undone on every start.
+function adoptInstallerChoice() {
+  // Up to 1.11.0 the app never found the installer's file and asked for a folder
+  // on first start instead: such a profile has a folder but no installer choice.
+  const askedOnFirstStart = !!settings.outputDir && !settings.installerDir;
+  for (const file of installChoiceFiles()) {
+    let chosen;
+    let stamp;
+    try { chosen = readText16(file); stamp = fs.statSync(file).mtimeMs; } catch { continue; }
+    if (!chosen) continue;
+    if (chosen !== settings.installerDir || stamp !== settings.installerStamp) {
+      settings.installerDir = chosen;
+      settings.installerStamp = stamp;
+      // The folder answered on first start is newer than an installer choice
+      // made before it (in-app updates install silently and leave the old file),
+      // so it stays, unless the installer has run again since.
+      if (!askedOnFirstStart || installedSinceSettings(file)) settings.outputDir = chosen;
+      saveSettings();
+    }
+    return;
+  }
+}
 
 function loadSettings() {
   if (settings) return settings;
   try { settings = JSON.parse(fs.readFileSync(settingsFile(), 'utf8')) || {}; } catch { settings = {}; }
-  // A folder forced from outside (used for automated runs and managed installs).
+  // A folder forced from outside (used for automated runs, such as the handbook's
+  // pictures, and managed installs) wins over the installer's choice.
   if (process.env.MULTI_SCREENS_OUTPUT_DIR) settings.outputDir = process.env.MULTI_SCREENS_OUTPUT_DIR;
-  // The installer leaves its choice in a small text file. Adopt it when it is
-  // new, so reinstalling with a different folder takes effect, while a later
-  // change made in the app's Settings is not undone on every start.
-  try {
-    const chosen = fs.readFileSync(installChoiceFile(), 'utf16le').replace(/^\uFEFF/, '').trim();
-    if (chosen && chosen !== settings.installerDir) {
-      settings.installerDir = chosen;
-      settings.outputDir = chosen;
-      saveSettings();
-    }
-  } catch { /* not installed with the installer */ }
+  else adoptInstallerChoice();
+  noteFolderInUse();
   return settings;
+}
+
+function noteFolderInUse() {
+  if (!settings || !settings.outputDir) return;
+  try {
+    let known = '';
+    try { known = readText16(folderInUseFile()); } catch { /* not written yet */ }
+    if (known === settings.outputDir) return;
+    fs.mkdirSync(app.getPath('userData'), { recursive: true });
+    fs.writeFileSync(folderInUseFile(), `\uFEFF${settings.outputDir}`, 'utf16le');
+  } catch { /* the installer then suggests its last choice */ }
 }
 
 function saveSettings() {
@@ -298,6 +348,7 @@ function saveSettings() {
     fs.mkdirSync(app.getPath('userData'), { recursive: true });
     fs.writeFileSync(settingsFile(), JSON.stringify(settings, null, 1));
   } catch { /* keep running with the in-memory value */ }
+  noteFolderInUse();
 }
 
 const outputFolder = () => loadSettings().outputDir || defaultOutputFolder();

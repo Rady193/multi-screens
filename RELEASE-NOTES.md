@@ -1,5 +1,42 @@
 # Release notes
 
+## 1.11.1 — 21 November 2026
+
+**The output folder chosen in the installer** is the one the app uses.
+
+### Downloads
+
+| File | Size | SHA-256 |
+|---|---|---|
+| `Multi-Screens-Setup-1.11.1.exe` | 71.1 MB | `7A8B09ED9EDD5E6FC966DA022E11343F5DB173B1702AF6DF128753225E0FED6B` |
+| `Multi-Screens-Handbook-1.11.1.pdf` | 4.7 MB | `ED9DEF53BEA75B840E95C651F5A666A9B6FC5CB093E29AA7F5EBA4C1AB8EED20` |
+
+For 64-bit Windows 10 and 11. Not code-signed, so Windows SmartScreen may ask for confirmation on first run.
+
+### Fixed
+
+- The folder chosen on the installer's **Output folder** page was not picked up: the app asked again on its first start. It now uses the installer's choice. A folder changed later in Settings is kept until the installer is run again with another folder.
+- Installing again, the **Output folder** page shows the folder in use instead of always `Documents\Multi Screens`, so clicking through a reinstall keeps it.
+- Updating from 1.11.0 or earlier keeps the folder answered on that first start. Settings, saved logins and review notes stay where they are.
+
+### Changed
+
+- **The handbook**, `Multi-Screens-Handbook-1.11.1.pdf`: Install and start says the installer shows the folder in use when installing again; the window pictures retaken.
+
+### Updating from 1.11.0 or earlier
+
+- Settings > Updates > **Update now**, or **Update** in the SCAFFApps Suite. These update without the installer's pages, so the output folder stays as it is.
+
+### Tested
+
+- From this installer's build (the unpacked app), in test profiles: a new profile took the installer's folder; a folder answered on first start was kept, and replaced when the installer had run since; a folder changed in Settings was kept, and replaced when the installer wrote the same folder again; a folder forced for automated runs won over the installer's. Each start left the folder in use for the installer, and a test build of the installer's own reading code read it back word for word (also with non-Latin letters, and with and without a byte-order mark).
+- On the developer's laptop, the 1.11.0 profile kept every setting and recorded the installer's choice.
+- The SCAFFApps design-language check passes. Microsoft Defender finds nothing in the installer or the handbook.
+
+### Not tested
+
+- Running this installer itself (new, or over 1.11.0), its Output folder page included, and updating from Settings or the Suite.
+
 ## 1.11.0 — 20 November 2026
 
 **Fix spelling** in the note boxes, with Windows' own spell checker, on this computer.
